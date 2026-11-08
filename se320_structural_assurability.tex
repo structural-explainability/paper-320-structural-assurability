@@ -29,6 +29,7 @@
 \usepackage{natbib}
 \bibpunct{(}{)}{;}{a}{}{ }
 \usepackage{hyperref}
+\usepackage{xurl}
 \usepackage{bookmark}
 \usepackage{authblk}
 \usepackage{microtype}
@@ -76,33 +77,6 @@
 \newtheorem*{convention*}{Convention}
 
 \providecommand{\keywords}[1]{\vspace{0.5em}\noindent\textbf{Keywords: }\small #1}
-
-% Transformation classifications
-\newcommand{\PRS}{\ensuremath{\mathsf{PRS}}}
-\newcommand{\BRK}{\ensuremath{\mathsf{BRK}}}
-\newcommand{\BF}{\ensuremath{\mathsf{BF}}}
-\newcommand{\NEU}{\ensuremath{\mathsf{NEU}}}
-\newcommand{\NAcls}{\ensuremath{\mathsf{N/A}}}
-
-% Split identity regimes imported from Referential Regimes
-\newcommand{\LOC}{\ensuremath{\mathrm{LOC}}}
-\newcommand{\OBJ}{\ensuremath{\mathrm{OBJ}}}
-\newcommand{\SCOPEE}{\ensuremath{\mathrm{SCOPE\text{-}E}}}
-\newcommand{\SCOPES}{\ensuremath{\mathrm{SCOPE\text{-}S}}}
-\newcommand{\RULEC}{\ensuremath{\mathrm{RULE\text{-}C}}}
-\newcommand{\RULES}{\ensuremath{\mathrm{RULE\text{-}S}}}
-
-% Formal notation
-\newcommand{\Fset}{\ensuremath{\mathcal{F}}}
-\newcommand{\Class}{\ensuremath{\mathrm{Class}}}
-\newcommand{\Sib}{\ensuremath{\mathrm{Sib}}}
-\newcommand{\IT}{\ensuremath{\mathsf{IT}}}
-\newcommand{\Ker}{\ensuremath{\mathrel{\approx_{d}}}}
-\newcommand{\Dop}{\ensuremath{\Delta^{\mathrm{op}}_{d}}}
-\newcommand{\Dsib}{\ensuremath{\Delta^{\mathrm{sib}}}}
-\newcommand{\PASS}{\textnormal{\textsc{pass}}}
-\newcommand{\FAIL}{\textnormal{\textsc{fail}}}
-\newcommand{\INDET}{\textnormal{\textsc{indeterminate}}}
 
 % ==================================================
 % PREFERRED CITATION SPECIFICATION
@@ -201,8 +175,9 @@ The author is the sole contributor to this work
 and is responsible for all aspects of the research, authorship, and publication.
 
 \subsection*{Code Availability}
-A reference implementation that checks the finite constructions of this paper
-is available~\citep{case2026operationalidentityfiniteaudit}.
+The Lean~4 formalization is available~\citep{case2026sestructuralassurability}.
+The query-violation finite-model experiment is in the companion pilot repository,
+\url{https://github.com/structural-explainability/se-pilot-structural-assurability}.
 
 \subsection*{Use of AI-Assisted Tools}
 AI-assisted tools were used for editing, formatting, and consistency checking,
