@@ -1,0 +1,274 @@
+% !TeX root = ../se320_structural_assurability.tex
+% ==================================================
+\section{Prior and Related Work}
+\label{aa.sec.prior-work}
+% ==================================================
+
+The concept of \emph{assurability} developed in this paper does not arise from an absence of assurance research.
+On the contrary, substantial bodies of work address assurance cases, testability, observability, auditability,
+monitorability, safety engineering, software architecture, evaluation rigor, measurement validity, and evidence integrity.
+These traditions approach a common problem from different directions: how justified claims about a complex engineered system can be supported by evidence.
+
+The contribution developed here is therefore integrative rather than terminological.
+We distinguish \emph{assurance}, which concerns justified confidence in claims about a system, from \emph{assurability},
+which concerns the structural capacity of a system and its operational environment to make adequate assurance evidence obtainable.
+We further treat assurability as relative to a particular assurance claim, access and cooperation conditions, and resource constraints.
+This section reviews the principal intellectual foundations for that distinction.
+
+\subsection{Assurance Cases and Evidence-Based Assurance}
+
+Assurance cases provide one of the most mature foundations for reasoning about justified confidence in system properties.
+Structured assurance arguments connect claims about a system to supporting arguments and evidence, often using
+Claims--Arguments--Evidence structures or notations such as
+Goal Structuring Notation (GSN)~\cite{bloomfield2010safetycases, nistAssuranceCase}.
+Related research has investigated the strength of assurance arguments, the treatment of defeaters,
+and methods for reasoning about confidence in assurance cases \cite{graydon2017confidence}.
+
+Recent work has extended assurance-case reasoning to machine learning and frontier AI.
+AMLAS provides a systematic methodology for integrating assurance activities into the
+machine-learning lifecycle and generating evidence supporting safety claims \cite{hawkins2021amlas}.
+Subsequent work has demonstrated complete ML safety cases and investigated the relationship between ML evidence, safety claims,
+and causal models of assurance \cite{picardi2023mlsafetycase, burton2022causalmodelsafetyassurance}.
+Frontier-AI researchers have similarly proposed
+safety-case structures connecting risk models, proxy tasks, evaluation environments,
+evidence, and claims \cite{goemans2024frontiercases}.
+More recent work explores composable and
+machine-readable assurance assertions capable of propagating through AI development and
+deployment workflows \cite{zhao2026composableassurance}.
+
+This literature establishes how evidence may support an assurance argument.
+Our concern is complementary: the architecture of the system itself affects which evidence can be obtained,
+how independently it can be obtained, how much it costs to obtain, and which assurance claims can therefore be supported in practice.
+An assurance case describes an argument from evidence;
+assurability characterizes structural conditions affecting the availability and quality of that evidence.
+
+\subsection{Design for Testability and System Observability}
+
+Hardware design for testability (DfT) provides a particularly important precedent.
+As integrated circuits became too complex to test economically solely through external interfaces, designers introduced architectural mechanisms specifically intended to improve internal \emph{controllability} and \emph{observability} \cite{williams1983testability, abramovici1990digitaltesting, ieeeDesignForTestability}. Test points, scan structures, built-in self-test, and related mechanisms make faults easier to activate and their effects easier to observe.
+
+The central DfT insight is architectural: testability is not merely a property of the test procedure.
+The design of the artifact affects the feasibility, completeness, and cost of testing it. Consequently, systems exhibiting equivalent functional behavior may differ substantially in the effort required to establish confidence in their correct operation.
+
+Software-engineering research generalizes related ideas through software testability, controllability, observability, diagnosability, and analyzability \cite{binder1994designfortestability, freedman1991testability}. These properties affect whether test conditions can be established, whether relevant internal or external states can be observed, and whether failures can be diagnosed efficiently.
+
+We adopt the underlying structural insight while extending its scope.
+Testing is one mechanism for producing assurance evidence, but assurance may additionally depend upon runtime monitoring, provenance, audit records, independent observation, internal-state measurements, environmental evidence, and post-incident reconstruction. Assurability therefore generalizes the design-for-testability intuition from the feasibility of testing to the feasibility of producing evidence for specified assurance claims.
+
+\subsection{Software Architecture and Quality Attributes}
+
+Software architecture research provides a second important foundation.
+Quality attributes such as performance, availability, security, modifiability, testability, and analyzability
+are influenced by architectural decisions and frequently interact through tradeoffs \cite{bass2021softwarearchitecture}.
+The Architecture Tradeoff Analysis Method (ATAM) evaluates architectures using concrete
+quality-attribute scenarios and identifies risks, sensitivity points, and tradeoff points rather than assuming a
+universally optimal architecture \cite{clements2002evaluating, kazman2000atam}.
+
+Recent work on quality models for machine-learning components explicitly includes analyzability, monitorability,
+and testability among relevant architectural properties \cite{lewis2026mlqualitymodel}.
+These attributes concern the extent to which a component exposes information permitting efficient behavioral assessment, runtime measurement, testing, and diagnosis.
+
+This scenario-based view motivates our treatment of assurability as claim-relative rather than as a single context-independent score.
+An architecture may be highly assurable with respect to one claim while providing little useful evidence for another.
+Similarly, architectures may trade internal observability against evidence independence, integrity, cost, performance, or information disclosure.
+Comparative assurability should therefore permit partial ordering and incomparability rather than require a universal scalar ranking.
+
+\subsection{Safety Engineering and Development Assurance}
+
+Safety-critical engineering has developed extensive methods for connecting system hazards, development processes, architectural decisions, evidence, and required assurance.
+
+Aviation standards such as ARP4754A and DO-178C vary development-assurance rigor according to the consequences of failure and impose increasingly rigorous verification activities for safety-critical functions \cite{saeARP4754A,rtcaDO178C}.
+
+Independence is itself an assurance-relevant architectural and process attribute:
+ARP4754A uses independence in development-assurance-level allocation and applies
+independence requirements to activities including
+requirements validation, implementation verification, and process assurance \cite{saeARP4754A}.
+
+More generally, safety engineering employs hazard analysis, fault analysis, independent verification and validation,
+defense in depth, runtime assurance, and structured safety cases to establish confidence in safety-relevant claims
+\cite{leveson2011engineering, rushby2007runtimeassurance}.
+
+These traditions establish an important distinction for the present work.
+The \emph{required level of assurance} may be determined by the consequence associated with failure of a claim, while the
+\emph{assurability} of the architecture determines how readily the evidence necessary to satisfy that requirement can be obtained.
+A high assurance requirement does not imply that the system architecture makes the required assurance practically achievable.
+
+\subsection{Security Evaluation and the Common Criteria}
+
+The Common Criteria for Information Technology Security Evaluation provides a mature framework connecting security claims, evidence requirements, evaluation rigor, and evaluation feasibility \cite{commonCriteria2022}. Evaluation Assurance Levels (EALs) provide predefined packages of progressively rigorous assurance requirements and explicitly balance the assurance sought against the cost and feasibility of obtaining that assurance \cite{commonCriteria2022part5}.
+
+The Common Criteria therefore provides important precedent for treating assurance as constrained by practical resource considerations.
+It also supports property-specific evaluation and equivalence reasoning rather than treating security as an undifferentiated system property.
+
+Evaluation rigor, however, is conceptually distinct from structural assurability.
+An EAL characterizes the depth and rigor of evaluation applied to specified security claims.
+It does not, by itself, characterize how effectively the architecture exposes trustworthy evidence relevant to those claims. Two systems subjected to equivalent evaluation rigor may differ substantially in the effort required to produce equivalent evidence.
+
+\subsection{Auditability and Accountability}
+
+Auditability research addresses the accessibility and preservation of evidence needed for retrospective or independent examination.
+Domain-specific work demonstrates that architecture can strongly influence auditability.
+NIST analyses of voting systems, for example, compare alternative architectures according to their ability to provide independent and trustworthy evidence supporting election audits \cite{nistVotingAuditability}. The comparison demonstrates that systems performing nominally equivalent functions can differ materially in the evidence their architectures make available.
+
+Recent AI research similarly argues for auditability-by-design.
+Proposed frameworks connect verifiable claims to the evidence necessary to evaluate those claims and examine whether AI systems make that evidence technically accessible \cite{fernsel2024auditability}. Practitioner-oriented work identifies auditability mechanisms spanning AI design, development, deployment, and operation \cite{li2025auditability}, while continuous-auditing architectures attempt to preserve evidence throughout the AI lifecycle \cite{auditmai2024}.
+
+A recent taxonomy of opaque, explainable, and replayable AI architectures further argues that accountability capabilities depend upon whether evidence is absent, reconstructed after execution, or preserved as part of the system architecture \cite{accountabilityArchitectures2026}. This work is especially close to the present argument because it treats evidence availability as an architectural property.
+
+Auditability nevertheless addresses a narrower question than the assurability construct developed here.
+Assurance may require evidence that is observable during execution, experimentally elicitable, independently generated, internally measured, calibrated, or causally validated in addition to evidence preserved for subsequent audit.
+
+\subsection{AI Monitorability and Internal-State Evidence}
+
+AI monitorability research examines whether properties of an AI system or agent can be detected from available observation channels.
+Formal treatments have considered limits on the ability to observe and predict AI behavior \cite{yampolskiy2024monitorability}.
+Recent frontier-model research treats monitorability as a property of the relationship between an agent, an observation channel,
+and a monitor, and evaluates information available from actions, outputs, chains of thought, and internal activations \cite{openai2025cotmonitorability}.
+
+This literature becomes increasingly important as evaluation awareness creates a possible divergence between behavior observed under evaluation and behavior that would occur under deployment conditions. Work on scheming, evaluation awareness, and loss-of-control evaluations has therefore motivated deeper evaluator access to model internals and white-box evaluation methods \cite{apollo2025whitebox, schemingEvaluations2024}.
+
+Mechanistic interpretability contributes potential measurement channels into learned computation itself, including activation analysis,
+representation probing, sparse feature extraction, attribution, circuit analysis, and causal intervention \cite{olah2020circuits, elhage2022toy, bricken2023monosemanticity}. Such methods raise the possibility that internal-state evidence could complement behavioral and runtime evidence.
+
+However, observing an activation or representation is not equivalent to observing a latent assurance construct such as deception,
+intent, evaluation awareness, or policy compliance.
+Internal-state measurements therefore introduce measurement-validity and calibration problems in addition to observability problems.
+
+\subsection{Agent Observability and Runtime Assurance}
+
+Agentic AI extends the assurance problem beyond model inputs and outputs.
+Agent behavior may depend upon tool calls, retrieved information, persistent memory, authorization state, environmental observations, external services, human interventions, and long-running execution trajectories.
+
+Agent observability work is increasingly standardizing telemetry for these interactions.
+OpenTelemetry and related initiatives are extending distributed tracing concepts to AI-agent execution,
+including model calls, tool use, and agent trajectories \cite{opentelemetry2025agents}.
+Security-oriented efforts similarly seek standardized agent observability records capable of supporting monitoring and investigation \cite{owaspAgentObservability}.
+
+Runtime-assurance research addresses the complementary problem of monitoring and constraining behavior while a system operates.
+Runtime monitoring and agent observability provide mechanisms for
+recording execution events and examining behavior during operation
+\cite{rushby2007runtimeassurance,opentelemetry2025agents,owaspAgentObservability}.
+NIST's work on evaluation probes for agentic AI similarly investigates embedding adversarial verification mechanisms within agent workflows and producing machine-readable audit evidence \cite{nistAgenticProbes2026}.
+
+These approaches provide important components of an assurance evidence architecture.
+They do not, individually, establish how evidence from heterogeneous observation planes should be compared or how architectural alternatives should be evaluated according to their overall capacity to support particular assurance claims.
+
+\subsection{Measurement Science, Validity, and Uncertainty}
+
+Assurance depends not merely upon collecting observations but upon establishing that measurements support the constructs and claims attributed to them.
+Measurement science therefore provides another essential foundation.
+Calibration, measurement uncertainty, traceability, construct validity, criterion validity, and
+reproducibility constrain the strength of conclusions that may legitimately be drawn from observed data \cite{jcgm2008gum, messick1995validity}.
+
+This distinction is particularly important for AI assurance because many properties of interest are latent constructs.
+Correctness may sometimes be externally established, but properties such as deceptive intent, evaluation awareness,
+strategic planning, or alignment are generally inferred from observable proxies.
+
+The distinction between observation and inference motivates an explicit measurement chain:
+
+\begin{equation}
+  \begin{aligned}
+    \text{construct}
+     & \rightarrow \text{observable}
+    \rightarrow \text{measurement}   \\
+     & \rightarrow \text{inference}
+    \rightarrow \text{evidence}
+    \rightarrow \text{assurance claim}.
+  \end{aligned}
+\end{equation}
+
+Each transition introduces assumptions that may limit the resulting assurance claim.
+A highly instrumented system is therefore not necessarily highly assurable if the
+relationship between its measurements and the relevant assurance construct cannot be validated.
+
+\subsection{Adversarial Monitoring, Evidence Integrity, and Noncooperation}
+
+Cybersecurity contributes a different assumption that is essential for AI assurance: the system or actor being evaluated may not cooperate.
+Security engineering therefore emphasizes privilege separation, independent monitoring,
+tamper-evident records, trusted computing bases,
+adversarial detection, fault containment, and defense in depth \cite{anderson2020security, saltzer1975protection}.
+
+This differs materially from assurance approaches that assume evaluators receive trustworthy telemetry, complete system access, or accurate developer disclosures.
+AI assurance methods must therefore state their dependence upon cooperation and distinguish evidence available under cooperative,
+partially cooperative, and adversarial access conditions.
+
+Evidence integrity is particularly important.
+A system that generates extensive telemetry but can
+selectively suppress or retrospectively alter that telemetry may provide weaker assurance evidence than a less observable system
+whose smaller evidence stream is independently protected. Thus, observability alone cannot determine assurability.
+
+\subsection{Economics and the Cost of Assurance}
+
+Several mature assurance disciplines recognize that assurance is constrained by cost.
+Hardware DfT arose partly because exhaustive external testing became economically infeasible as system complexity increased.
+Common Criteria explicitly relates evaluation assurance to the cost and feasibility of obtaining it \cite{commonCriteria2022part5}.
+Software architecture methods similarly reason about tradeoffs among quality attributes and engineering resources \cite{bass2021softwarearchitecture}.
+
+Current AI monitoring work identifies computational cost, organizational burden, scalability, and competitive pressure
+as practical barriers to continuous assurance \cite{nist2026monitoring}. These considerations become especially important when compliant systems compete against systems that omit costly safeguards.
+
+We therefore treat assurance cost as a first-class constraint rather than an implementation detail.
+A theoretically strong assurance mechanism that imposes prohibitive compute, latency, capability,
+development, disclosure, or verification costs may provide limited practical assurance at scale.
+
+This motivates comparison of assurance architectures under explicit resource constraints and suggests an \emph{assurance frontier}:
+the set of architectures for which assurance capability cannot be improved along relevant dimensions without increasing cost or sacrificing another relevant property.
+
+\subsection{From Fragmented Properties to Comparative Assurability}
+
+The preceding literatures provide substantial portions of the required conceptual machinery.
+Hardware engineering
+provides controllability and observability.
+Software architecture provides quality attributes, scenarios, and tradeoff analysis.
+Safety engineering provides claim-criticality relationships, independence, and structured assurance.
+Security evaluation provides evaluation rigor and explicit treatment of assurance cost.
+Auditability provides evidence accessibility and preservation.
+Monitorability provides observation-channel analysis.
+Runtime assurance and agent observability provide execution evidence.
+Mechanistic interpretability provides potential access to learned internal state.
+Measurement science provides validity, calibration, and uncertainty.
+Cybersecurity provides adversarial assumptions, evidence integrity, and noncooperation.
+
+What remains less clearly formalized is the common structural property connecting these concepts.
+
+We use \emph{assurability} to denote the capacity of a system and its evidence-producing environment to
+support or refute a specified assurance claim through valid, sufficient, appropriately independent, and practically obtainable evidence.
+
+Crucially, assurability is not treated as an unconditional scalar property of a system.
+We provisionally represent it as claim-, access-, and resource-relative:
+
+\begin{equation}
+  \mathcal{A}(S,C,K,B),
+\end{equation}
+
+where \(S\) denotes the system, \(C\) the assurance claim, \(K\) the knowledge, access,
+and cooperation conditions available to the evaluator, and \(B\) the resource constraints under which assurance must be obtained.
+
+This framing separates four concepts that are frequently adjacent but not equivalent:
+
+\begin{equation}
+  \begin{aligned}
+    \text{system property}
+     & \neq \text{assurability}       \\
+     & \neq \text{assurance argument}
+    \neq \text{confidence in the argument}.
+  \end{aligned}
+\end{equation}
+
+It also permits comparative reasoning without assuming
+that heterogeneous assurance properties can be reduced defensibly to a universal numerical score.
+For two systems \(S_1\) and \(S_2\), a relation of the form
+
+\begin{equation}
+  S_1 \succeq_{C,K,B} S_2
+\end{equation}
+
+can express that \(S_1\) is at least as assurable as \(S_2\) with
+respect to claim \(C\), under conditions \(K\),
+within resource constraints \(B\). Such a relation may induce only a partial order:
+competing architectures may be incomparable when they expose different assurance capabilities or trade evidence strength against cost, independence, integrity, or other dimensions.
+
+The proposed framework therefore does not replace existing
+assurance, auditability, monitorability, interpretability, or evaluation methodologies.
+It attempts to provide an architectural abstraction through which their contributions can be related and competing AI systems
+can be compared according to the evidence they make practically available for assurance.

@@ -1,0 +1,72 @@
+# ============================================================
+# CITATION.cff (How to cite this project)
+# ============================================================
+
+# REQ.UNIVERSAL: Professional open projects SHOULD include CITATION.cff.
+# WHY: Support correct citation and attribution.
+# ALT: Internal or private repositories may omit citation metadata.
+# CUSTOM: Update author, repository, license, and keyword fields as needed.
+# CUSTOM: Add version and date-released at the first tagged release.
+# CUSTOM: Add doi and url under preferred-citation when the preprint is posted.
+# USAGE: See https://citation-file-format.github.io/ for details.
+# check with:
+# uvx cffconvert --validate
+
+cff-version: "1.2.0"
+message: "If you use this work, please cite it using the article information in CITATION.cff."
+
+title: "Structural Assurability: A Claim-Relative Framework for Evidence-Based AI Assurance"
+
+authors:
+  - family-names: Case
+    given-names: Denise M.
+    orcid: "https://orcid.org/0000-0001-6165-7389"
+    affiliation: "Northwest Missouri State University, School of Computer Science and Information Systems, Maryville, MO, USA"
+
+repository-code: "https://github.com/structural-explainability/paper-320-structural-assurability"
+license: "CC-BY-4.0"
+
+abstract: >-
+  This repository contains the source materials for Structural Assurability:
+  A Claim-Relative Framework for Evidence-Based AI Assurance. The paper
+  formalizes structural assurability as the claim-relative capacity of a
+  system and its evidence-producing environment to make assurance-relevant
+  evidence obtainable under specified access, cooperation, and resource
+  constraints. Systems are compared through the claim-relevant distinctions
+  their obtainable evidence enables, permitting equivalence, strict
+  dominance, and incomparability without a scalar score. Seven candidate
+  structural dimensions are proposed. The companion Lean 4 formalization
+  at v0.4.1 provides profile-grounded separating constructions for
+  observability, evidence coverage, traceability, and reconstructability.
+  Capability non-equivalence is a separate obligation.
+  Controllability, independence, and integrity remain open candidates.
+  Representative AI architectures show that richer instrumentation
+  can increase assurability for some claims, add nothing for others, and
+  trade internal visibility against independent evidence.
+  The framework characterizes capacity for examination,
+  not a favorable assurance outcome.
+
+keywords:
+  - structural explainability
+  - structural assurability
+  - AI assurance
+  - assurance evidence
+  - assurance cases
+  - observability
+  - controllability
+  - traceability
+  - reconstructability
+  - evidence integrity
+  - auditability
+  - runtime assurance
+  - comparative assurability
+
+preferred-citation:
+  type: article
+  title: "Structural Assurability: A Claim-Relative Framework for Evidence-Based AI Assurance"
+  authors:
+    - family-names: Case
+      given-names: Denise M.
+      orcid: "https://orcid.org/0000-0001-6165-7389"
+      affiliation: "Northwest Missouri State University, School of Computer Science and Information Systems, Maryville, MO, USA"
+  year: 2026

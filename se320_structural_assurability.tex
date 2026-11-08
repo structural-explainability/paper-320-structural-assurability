@@ -1,0 +1,223 @@
+\PassOptionsToPackage{colorlinks=true,allcolors=black}{hyperref}
+% REQ-FILE: The above line, \PassOptionsToPackage{} must be the first line.
+
+\documentclass[11pt]{article}
+
+% Encoding and font setup for cross-platform reproducibility
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Improve readability for dense theoretical material
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{caption}
+% \captionsetup[table]{font=small,skip=4pt}
+
+% Mathematical notation and table formatting for formal semantics
+\usepackage{amsmath,amssymb}
+\usepackage{extarrows}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+% Theorem environments (best-practice, widely standard)
+\usepackage{amsthm}
+
+\usepackage{url}
+\usepackage{natbib}
+\bibpunct{(}{)}{;}{a}{}{ }
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{authblk}
+\usepackage{microtype}
+\setlength{\emergencystretch}{1em}
+\hbadness=2000
+\usepackage{enumitem}
+
+\setlist[itemize]{itemsep=0.2em,topsep=0.2em,parsep=0em,partopsep=0em}
+\setlist[enumerate]{itemsep=0.2em,topsep=0.2em,parsep=0em,partopsep=0em}
+\setlength{\parskip}{0.75em}
+\setlength{\parindent}{0em}
+
+% Italic body text: results
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+% Upright body text: definitions and examples
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{example}[theorem]{Example}
+
+% Upright body text: remarks/notes
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{note}[theorem]{Note}
+\newtheorem{convention}[theorem]{Convention}
+
+% Optional: unnumbered versions for front-matter previews/callouts
+% (This is also standard for a preview without numbering.)
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem*{conjecture*}{Conjecture}
+\newtheorem*{claim*}{Claim}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{example*}{Example}
+\newtheorem*{remark*}{Remark}
+\newtheorem*{note*}{Note}
+\newtheorem*{convention*}{Convention}
+
+\providecommand{\keywords}[1]{\vspace{0.5em}\noindent\textbf{Keywords: }\small #1}
+
+% Transformation classifications
+\newcommand{\PRS}{\ensuremath{\mathsf{PRS}}}
+\newcommand{\BRK}{\ensuremath{\mathsf{BRK}}}
+\newcommand{\BF}{\ensuremath{\mathsf{BF}}}
+\newcommand{\NEU}{\ensuremath{\mathsf{NEU}}}
+\newcommand{\NAcls}{\ensuremath{\mathsf{N/A}}}
+
+% Split identity regimes imported from Referential Regimes
+\newcommand{\LOC}{\ensuremath{\mathrm{LOC}}}
+\newcommand{\OBJ}{\ensuremath{\mathrm{OBJ}}}
+\newcommand{\SCOPEE}{\ensuremath{\mathrm{SCOPE\text{-}E}}}
+\newcommand{\SCOPES}{\ensuremath{\mathrm{SCOPE\text{-}S}}}
+\newcommand{\RULEC}{\ensuremath{\mathrm{RULE\text{-}C}}}
+\newcommand{\RULES}{\ensuremath{\mathrm{RULE\text{-}S}}}
+
+% Formal notation
+\newcommand{\Fset}{\ensuremath{\mathcal{F}}}
+\newcommand{\Class}{\ensuremath{\mathrm{Class}}}
+\newcommand{\Sib}{\ensuremath{\mathrm{Sib}}}
+\newcommand{\IT}{\ensuremath{\mathsf{IT}}}
+\newcommand{\Ker}{\ensuremath{\mathrel{\approx_{d}}}}
+\newcommand{\Dop}{\ensuremath{\Delta^{\mathrm{op}}_{d}}}
+\newcommand{\Dsib}{\ensuremath{\Delta^{\mathrm{sib}}}}
+\newcommand{\PASS}{\textnormal{\textsc{pass}}}
+\newcommand{\FAIL}{\textnormal{\textsc{fail}}}
+\newcommand{\INDET}{\textnormal{\textsc{indeterminate}}}
+
+% ==================================================
+% PREFERRED CITATION SPECIFICATION
+%
+% @techreport{case2026_assurability,
+%   author      = {Case, Denise M.},
+%   title       = {Structural Assurability: A Claim-Relative Framework for Evidence-Based AI Assurance},
+%   institution = {Preprint},
+%   year        = {2026},
+% }
+% ==================================================
+
+\title{
+Structural Assurability:\\
+A Claim-Relative Framework for \\
+Evidence-Based AI Assurance
+}
+
+\author{Denise M. Case}
+\affil{\small School of Computer Science and Information Systems\\
+Northwest Missouri State University, Maryville, MO, USA}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+% arxiv allows 1920 char for meta abstract
+\begin{abstract}
+  Structural assurance claims depend not only on what an AI system does,
+  but on what evidence its architecture makes practically obtainable about what it does.
+  Two systems can exhibit equivalent functional behavior while differing materially
+  in their capacity to support or refute the same assurance claim.
+  This paper formalizes that difference as \emph{structural assurability}:
+  the claim-relative capacity of a system and its evidence-producing environment
+  to make assurance-relevant evidence obtainable under specified
+  access, cooperation, and resource constraints.
+  The framework separates structural properties from evidence quality and
+  downstream assurance reasoning.
+  It identifies seven provisional structural dimensions:
+  observability, controllability, traceability, reconstructability,
+  independence, integrity, and evidence coverage;
+  and introduces a separating-construction criterion:
+  a dimension is assurance-relevant when
+  removing it can eliminate a distinction between systems
+  that matters in at least one assurance context.
+  Rather than reducing assurability to a scalar score,
+  the framework compares systems through the claim-relevant distinctions
+  their obtainable evidence enables, permitting equivalence,
+  strict dominance, and incomparability.
+  Representative AI architectures show that richer instrumentation
+  can increase assurability for some claims, add nothing for others,
+  and trade internal visibility against independent evidence
+  in ways that prevent a total ordering.
+  The framework is deliberately open-ended:
+  the proposed dimensions are neither claimed sufficient nor necessary in every context,
+  and additional dimensions may be admitted when they support new separating constructions.
+  Structural assurability therefore characterizes capacity for examination,
+  not a favorable assurance outcome.
+\end{abstract}
+
+
+\keywords{
+  AI assurance;
+  structural assurability;
+  assurance evidence;
+  observability;
+  traceability;
+  auditability;
+  runtime assurance;
+  assurance cases
+}
+
+\input{sections/01-introduction}
+\input{sections/02-background}
+\input{sections/03-problem-setting}
+\input{sections/04-formal-model}
+\input{sections/05-structural-assurability}
+\input{sections/06-theoretical-results}
+\input{sections/07-pilot-study}
+\input{sections/08-discussion}
+\input{sections/10-threats-to-validity}
+\input{sections/99-conclusion}
+
+% ==================================================
+\section*{Statements and Declarations}
+% ==================================================
+
+\subsection*{Acknowledgments}
+This research made use of SciX,
+a scientific literature search and discovery platform,
+whose related-literature tools helped identify relevant work across disciplinary boundaries.
+
+\subsection*{Author Contributions}
+The author is the sole contributor to this work
+and is responsible for all aspects of the research, authorship, and publication.
+
+\subsection*{Code Availability}
+A reference implementation that checks the finite constructions of this paper
+is available~\citep{case2026operationalidentityfiniteaudit}.
+
+\subsection*{Use of AI-Assisted Tools}
+AI-assisted tools were used for editing, formatting, and consistency checking,
+and in developing and reviewing mathematical definitions, proofs,
+and the companion Lean~4 formalization.
+The author reviewed all suggestions and is solely responsible for the content.
+
+\subsection*{Declaration of Conflicting Interest}
+The author confirms there are no potential conflicts of interest.
+
+% ==================================================
+% References
+% ==================================================
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

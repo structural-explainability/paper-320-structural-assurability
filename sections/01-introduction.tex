@@ -1,0 +1,241 @@
+% !TeX root = ../se320_structural_assurability.tex
+% ==================================================
+\section{Introduction}
+\label{aa.sec.intro}
+% ==================================================
+
+Assurance depends on evidence.
+
+For a claim that a system is safe, secure, reliable, compliant, or otherwise trustworthy,
+an evaluator must be able to obtain evidence bearing on that claim and connect the evidence to the claim through a defensible argument.
+Assurance-case methods make this relationship explicit: claims are supported by evidence through structured reasoning,
+while separate questions concern the adequacy of the argument and the confidence warranted
+by it~\cite{goodenough2012confidence,bloomfield2010safetycases}.
+
+For increasingly capable AI systems, however, an important question arises before the assurance argument can even be constructed:
+
+\begin{quote}
+  What evidence does the structure of the system make possible to obtain?
+\end{quote}
+
+Two AI systems may exhibit equivalent externally measured performance while differing substantially
+in their capacity to expose evidence concerning how that performance was produced.
+One system may expose only prompts and outputs.
+Another may additionally preserve tool invocations, retrieval events, authorization decisions,
+state transitions, provenance, independently generated records, and selected internal-state measurements.
+Even when the systems behave identically over a specified evaluation suite, they need not support the same assurance inquiries.
+
+This distinction becomes increasingly important as AI systems move from isolated prediction toward persistent,
+tool-using, stateful, and agentic operation.
+Pre-deployment evaluation remains valuable, but deployed systems operate under changing inputs, environments, integrations, and incentives.
+Recent work has accordingly expanded from benchmark evaluation toward runtime monitoring,
+agent observability, auditability, provenance, assurance cases, interpretability, and
+internal-state monitoring \cite{nist2026monitoring,fernsel2024auditability,openai2025cotmonitorability,nistAgenticProbes2026}.
+These efforts expose a common underlying problem: assurance depends not merely on the existence of evaluation methods,
+but on whether the system and its operating environment make the evidence required by those methods obtainable.
+
+This problem has mature analogues elsewhere in engineering.
+
+Hardware design for testability recognizes that testing effectiveness is partly determined by the structure of the device being tested.
+Observability and controllability can be deliberately designed into hardware so that relevant internal states
+can be established and examined economically \cite{abramovici1990digitaltesting,williams1983testability}.
+Software architecture similarly affects testability, analyzability, diagnosability, and the practical cost of
+verification \cite{bass2021softwarearchitecture,clements2002evaluating,kazman2000atam}.
+Safety engineering recognizes that architecture affects the generation and independence of assurance evidence,
+while security engineering emphasizes provenance, tamper resistance, privilege separation, and evidence integrity
+under adversarial conditions \cite{saeARP4754A,rtcaDO178C,saltzer1975protection,anderson2020security}.
+
+AI assurance draws on all of these traditions, but the corresponding structural property is not usually the primary object of analysis.
+
+A system may be described as auditable, monitorable, interpretable, observable, testable, or capable of supporting an assurance case.
+Each concept captures an important part of the problem.
+None alone answers the more general comparative question considered here:
+
+\begin{quote}
+  Given two AI systems subject to the same assurance claim, what structural differences determine
+  whether one permits assurance-relevant evidence to be obtained that the other does not?
+\end{quote}
+
+We call this property \emph{structural assurability}.
+
+Structural assurability is the claim-relative capacity of a system and its evidence-producing environment
+to make evidence relevant to supporting or refuting an assurance claim practically obtainable
+under specified access, cooperation, and resource constraints.
+
+We write this dependence schematically as
+
+\begin{equation}
+  \mathcal{A}(S,C,K,B),
+\end{equation}
+
+where \(S\) is the system, \(C\) is the assurance claim, \(K\) represents applicable knowledge,
+access, trust, and cooperation conditions,
+and \(B\) represents practical resource constraints.
+
+The formulation is intentionally claim-relative.
+
+A system that exposes extensive internal state may be highly assurable for a claim concerning internal computation while
+gaining little advantage for a claim resolved completely from an externally observable output.
+Likewise, an architecture with strong independent external monitoring may support some claims better
+than an architecture offering richer but operator-controlled internal telemetry.
+
+Accordingly,
+
+\begin{equation}
+  \text{assurability}(S)
+\end{equation}
+
+without a specified assurance context is generally underspecified.
+
+Structural assurability is also deliberately distinct from safety or other favorable system properties.
+
+A system can be structurally highly assurable and nevertheless fail the assurance claim under investigation.
+Richer evidence may make failure easier to establish.
+Structural assurability concerns capacity for examination rather than the result of examination:
+
+\begin{equation}
+  \boxed{
+    \begin{aligned}
+      \text{Property satisfaction}
+       & \neq
+      \text{Structural assurability} \\
+       & \neq
+      \text{Assurance argument}
+      \neq
+      \text{Confidence in the argument}.
+    \end{aligned}
+  }
+\end{equation}
+
+This separation is important because otherwise evidence-producing mechanisms can be conflated with
+evidence that happens to support a desired conclusion.
+A useful assurance structure should support both confirmation and refutation.
+
+The central premise of this paper is therefore modest:
+
+\begin{quote}
+  Systems with equivalent functional behavior or measured performance can differ materially in assurability because their
+  architectures and evidence-producing environments can differ in their capacity to make assurance-relevant distinctions possible.
+\end{quote}
+
+The phrase \emph{assurance-relevant distinctions} provides the core interpretation developed in this work.
+
+Consider a claim concerning whether an AI agent performed an unauthorized consequential action.
+Relevant alternatives may include no action, authorized agent action, unauthorized agent action,
+human-initiated action, externally initiated action, or an action whose historical record has been altered.
+An evidence-producing structure contributes to assurability
+when it makes one or more such alternatives distinguishable where they would otherwise remain unresolved.
+
+This formulation avoids equating assurability with evidence volume.
+
+More logs do not necessarily imply greater assurability.
+More internal state does not necessarily imply greater assurability.
+More evaluation access does not necessarily imply greater assurability.
+A structural difference matters when it enables a distinction material to the assurance claim.
+
+We initially identify seven structural dimensions that can affect this capacity:
+
+\begin{equation}
+  \begin{aligned}
+    D_S = \{ &
+    \text{observability},
+    \text{controllability},
+    \text{traceability},
+    \text{reconstructability}, \\
+             &
+    \text{independence},
+    \text{integrity},
+    \text{evidence coverage}
+    \}.
+  \end{aligned}
+\end{equation}
+
+These dimensions are provisional.
+We do not claim that they are mutually independent,
+universally required, jointly sufficient, or complete.
+
+Instead, the paper adopts a weaker criterion.
+
+A structural dimension is assurance-relevant when there exists an assurance context
+and a pair of otherwise suitably controlled systems for which variation in that dimension creates a material difference
+in the assurance-relevant distinctions supported by obtainable evidence.
+
+We refer to such a pair as a \emph{separating construction}.
+
+The resulting logical claim is therefore not
+
+\begin{equation}
+  \text{all seven dimensions}
+  \Rightarrow
+  \text{sufficient assurance}.
+\end{equation}
+
+Rather, the criterion for establishing a candidate dimension \(d\)
+requires a specified assurance context and a controlled pair
+of systems exhibiting both a difference in the dimension
+and an independently justified difference in claim-material
+evidentiary capabilities.
+
+In this sense, omitting \(d\) from a general model can collapse systems that differ materially in assurability for at least one assurance context.
+
+The framework is consequently open-ended.
+If a future architecture, threat model, assurance claim, or measurement mechanism reveals an
+additional structural property that admits a separating construction not representable by the current dimensions,
+that property can be added without invalidating the existing framework.
+
+The paper also avoids defining a universal scalar assurability score.
+
+Different systems may expose different assurance-relevant capabilities without either capability set containing the other.
+An architecture with strong internal-state observability but weak evidence independence may be incomparable
+to an architecture with limited internal visibility but independently generated, tamper-resistant records of consequential external actions.
+
+The appropriate comparative structure is therefore generally a partial relation admitting
+equivalence, dominance, and incomparability rather than a total ranking.
+
+This paper makes the following contributions:
+
+\begin{enumerate}
+
+
+  \item It distinguishes \emph{structural assurability} from property satisfaction,
+        assurance arguments, confidence in assurance arguments, auditability, monitorability, and related concepts.
+
+  \item It defines assurability as a claim-relative property under explicit access, cooperation, and resource constraints.
+
+  \item It separates structural properties of an evidence-producing architecture from downstream
+        evidence quality, measurement validity, uncertainty, and assurance reasoning.
+
+  \item It identifies an initial set of seven candidate structural dimensions:
+        observability, controllability, traceability, reconstructability, independence, integrity, and evidence coverage.
+
+  \item It introduces a separating-construction criterion for demonstrating that a proposed structural dimension
+        contributes to assurability without claiming that the dimension is universally necessary or that the resulting dimension set is sufficient.
+
+  \item It develops a comparative model in which systems are evaluated according to the assurance-relevant distinctions
+        made possible by practically obtainable evidence, allowing equivalence, strict dominance, and incomparability without requiring a universal scalar score.
+
+  \item It applies the framework to representative AI architectures and demonstrates that richer instrumentation
+        can increase assurability for one claim, provide no additional assurability for another, or create tradeoffs that prevent a total ordering.
+
+
+\end{enumerate}
+
+The constituent ideas developed here are not individually new.
+Observability, controllability, testability, auditability, monitorability, assurance cases,
+provenance, evidence integrity, independence, and evaluation rigor each have substantial intellectual histories.
+
+The proposed contribution is their integration around a different object of study:
+the structural capacity of an AI system and its evidence-producing environment to make claim-relevant distinctions possible.
+
+The remainder of the paper proceeds as follows.
+Section~\ref{aa.sec.prior-work} examines the foundations of the framework
+across assurance theory, design for testability, software architecture, safety engineering,
+security evaluation, auditability, AI monitoring, interpretability, measurement science, and related work.
+Section~\ref{aa.sec.foundations} defines structural assurability and develops the distinction among structural properties,
+evidence properties, and assurance constraints.
+Section~\ref{aa.sec.formal-model} formalizes comparative assurability and establishes the separating-construction criterion.
+Section~\ref{aa.sec.applications} applies the framework to representative AI architectures.
+Section~\ref{aa.sec.theoretical-results} records what is established in the Lean formalization.
+Section~\ref{aa.sec.pilot} describes an illustrative application to an external evaluation framework.
+Sections~\ref{aa.sec.discussion} and~\ref{aa.sec.threats} discuss implications, limitations, and threats to validity.
+Section~\ref{aa.sec.conclusion} concludes.

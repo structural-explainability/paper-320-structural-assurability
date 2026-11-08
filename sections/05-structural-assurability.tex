@@ -1,0 +1,746 @@
+% !TeX root = ../se320_structural_assurability.tex
+
+% ==================================================
+\section{Applying Structural Assurability to AI Architectures}
+\label{aa.sec.applications}
+% ==================================================
+
+The preceding sections developed structural assurability as a claim-relative
+property concerning the capacity of a system and its evidence-producing
+environment to make assurance-relevant distinctions possible.
+This section applies that framework to representative AI architectures.
+
+The purpose is not to evaluate particular commercial systems or prescribe
+a preferred architecture.
+Instead, the examples examine whether the formal distinctions developed in
+Sections~\ref{aa.sec.foundations} and~\ref{aa.sec.formal-model}
+reveal meaningful differences among systems that may otherwise appear
+functionally similar.
+
+Three cases are considered.
+
+The first demonstrates strict comparative dominance for a claim concerning
+unauthorized consequential action.
+
+The second demonstrates assurability equivalence for a claim that can be
+resolved primarily through externally observable behavior.
+
+The third demonstrates incomparability when different architectures enable
+different assurance-relevant distinctions.
+
+Together, the cases illustrate that structural assurability is claim-relative
+and need not induce a universal ranking of architectures.
+
+\subsection{Representative Architectures}
+\label{aa.subsec.representative-architectures}
+
+Consider three abstract AI system architectures.
+
+They are intentionally simplified.
+Each represents a class of evidence-producing structure rather than a
+specific implementation.
+
+\subsubsection{Opaque Service Architecture}
+
+Let \(S_O\) denote an AI system exposed primarily through an input-output
+interface.
+
+The system accepts requests and returns outputs.
+Standard application-level records may establish that a request occurred
+and that a response was returned, but the assurance interface exposes little
+or no trusted evidence concerning internal execution, tool use,
+authorization decisions, retrieved information, intermediate state,
+or causal provenance.
+
+A simplified evidence surface is
+
+\begin{equation}
+  S_O:
+  \qquad
+  \{
+  \text{input},
+  \text{output},
+  \text{request metadata}
+  \}.
+\end{equation}
+
+This architecture is not assumed to be unsafe or unreliable.
+It is simply structurally limited in the assurance-relevant distinctions
+that can be made from its exposed evidence.
+
+\subsubsection{Instrumented Agent Architecture}
+
+Let \(S_A\) denote an agentic AI system with runtime instrumentation.
+
+In addition to externally visible inputs and outputs, the system records
+evidence concerning consequential execution events, such as
+
+\begin{equation}
+  \begin{aligned}
+    S_A:\quad
+    \{ &
+    \text{input},
+    \text{output},
+    \text{tool invocations},
+    \text{retrieval events}, \\
+       &
+    \text{authorization decisions},
+    \text{memory updates},
+    \text{state transitions},
+    \text{provenance}
+    \}.
+  \end{aligned}
+\end{equation}
+
+The architecture therefore provides a larger evidence surface concerning
+system execution.
+
+However, the evidence may still be generated and preserved within
+infrastructure controlled by the same operator or execution environment
+as the agent itself.
+
+\subsubsection{Assurability-Oriented Architecture}
+
+Let \(S_R\) denote an architecture explicitly designed to preserve
+assurance-relevant evidence.
+
+It includes the runtime evidence available from \(S_A\) and adds
+mechanisms such as
+
+\begin{equation}
+  \begin{aligned}
+    S_R:\quad \{ &
+    \text{instrumented execution evidence},
+    \text{independent action observation},   \\
+                 &
+    \text{tamper-evident evidence preservation},
+    \text{authenticated provenance},         \\
+                 &
+    \text{controlled replay or intervention},
+    \text{explicit action-surface coverage}, \\
+                 &
+    \text{selected internal-state instrumentation}
+    \}.
+  \end{aligned}
+\end{equation}
+
+The term \emph{assurability-oriented} is descriptive rather than normative.
+The architecture is designed to increase the range of assurance-relevant
+distinctions that can be made under specified conditions.
+
+It does not follow that the system satisfies any particular assurance claim.
+
+\subsection{Case 1: Unauthorized Consequential Action}
+\label{aa.subsec.case-unauthorized-action}
+
+Consider the assurance claim
+
+\begin{equation}
+  \begin{aligned}
+    C_1 ={} & \text{``The agent performed no unauthorized consequential action} \\
+            & \text{during interval }T\text{.''}
+  \end{aligned}
+  \label{eq:claim-unauthorized-action}
+\end{equation}
+
+Suppose a consequential external action \(a\) is observed during \(T\).
+
+Relevant assurance questions include:
+
+\begin{align*}
+  Q_1 & = \text{Did action }a\text{ occur?}                                                  \\
+  Q_2 & = \text{Which component or actor initiated }a\text{?}                                \\
+  Q_3 & = \text{What authorization state applied when }a\text{ was initiated?}               \\
+  Q_4 & = \text{Through what execution pathway did }a\text{ occur?}                          \\
+  Q_5 & = \text{Could the evidence concerning }a\text{ have been altered or suppressed?}     \\
+  Q_6 & = \text{Is the evidence concerning }a\text{ corroborated by a source}                \\
+      & \quad\text{outside the evaluated component?}                                         \\                                                        \\
+  Q_7 & = \text{Were all consequential-action channels represented by the evidence surface?}
+\end{align*}
+
+These questions define claim-relevant distinctions.
+
+For example, \(Q_2\) may require distinguishing
+
+\begin{equation}
+  \text{agent initiated }a
+  \quad\text{from}\quad
+  \text{human initiated }a,
+\end{equation}
+
+while \(Q_3\) may require distinguishing
+
+\begin{equation}
+  \text{authorized action}
+  \quad\text{from}\quad
+  \text{unauthorized action}.
+\end{equation}
+
+\subsubsection{Opaque Service}
+
+Under \(S_O\), external evidence may establish that a result occurred,
+but the evidence surface may not permit reliable attribution of the
+action to the agent, a human operator, an external service, or another
+component.
+
+Thus, the architecture may permit resolution of \(Q_1\) while leaving
+\(Q_2\)--\(Q_7\) substantially unresolved.
+
+Its claim-relevant distinction set may therefore be represented
+schematically as
+
+\begin{equation}
+  \mathcal{G}_{q_1}(S_O)
+  =
+  \{
+  g_{\mathrm{occurrence}}
+  \}.
+\end{equation}
+
+\subsubsection{Instrumented Agent}
+
+System \(S_A\) additionally exposes runtime traces linking actions to
+tool invocations, authorization decisions, retrieval events, and state
+transitions.
+
+It may therefore permit distinctions concerning:
+
+\begin{equation}
+  \begin{aligned}
+     & \text{action occurrence},   \\
+     & \text{action initiator},    \\
+     & \text{authorization state}, \\
+     & \text{execution pathway}.
+  \end{aligned}
+\end{equation}
+
+Schematically,
+
+\begin{equation}
+  \mathcal{G}_{q_1}(S_A)
+  =
+  \{
+  g_{\mathrm{occurrence}},
+  g_{\mathrm{origin}},
+  g_{\mathrm{authorization}},
+  g_{\mathrm{pathway}}
+  \}.
+\end{equation}
+
+However, if all records are generated and preserved within the same
+administrative or computational boundary as the agent, questions
+concerning evidence manipulation or independent corroboration may
+remain unresolved.
+
+\subsubsection{Assurability-Oriented Architecture}
+
+System \(S_R\) preserves the distinctions available from \(S_A\) while
+adding independently generated observations, tamper-evident records,
+authenticated provenance, and explicit monitoring of consequential-action
+channels.
+
+It may therefore additionally distinguish:
+
+\begin{equation}
+  \text{unaltered evidence}
+  \quad\text{from}\quad
+  \text{evidence subject to undetected manipulation},
+\end{equation}
+
+and
+
+\begin{equation}
+  \text{complete monitored action surface}
+  \quad\text{from}\quad
+  \text{partially observed action surface}.
+\end{equation}
+
+Schematically,
+
+\begin{equation}
+  \begin{aligned}
+    \mathcal{G}_{q_1}(S_R)
+    =
+    \{ &
+    g_{\mathrm{occurrence}},
+    g_{\mathrm{origin}},
+    g_{\mathrm{authorization}},
+    g_{\mathrm{pathway}}, \\
+       &
+    g_{\mathrm{integrity}},
+    g_{\mathrm{coverage}},
+    g_{\mathrm{independent\ corroboration}}
+    \}.
+  \end{aligned}
+\end{equation}
+
+If each architecture preserves the capabilities of the preceding
+architecture while adding the capabilities shown above, then
+
+\begin{equation}
+  \mathcal{G}_{q_1}(S_O)
+  \subset
+  \mathcal{G}_{q_1}(S_A)
+  \subset
+  \mathcal{G}_{q_1}(S_R).
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+  S_R
+  \succ_{q_1}
+  S_A
+  \succ_{q_1}
+  S_O.
+  \label{eq:case1-order}
+\end{equation}
+
+This ordering is not a general ranking of the three architectures.
+
+It holds only for the specified claim and assurance context.
+
+The result illustrates how structural differences can create strict
+comparative assurability without establishing that any of the systems
+actually satisfies \(C_1\).
+
+Indeed, \(S_R\) may provide stronger evidence that an unauthorized action
+\emph{did} occur.
+
+\subsection{Case 2: Externally Observable Output Property}
+\label{aa.subsec.case-output-property}
+
+Consider a different claim:
+
+\begin{equation}
+  \begin{aligned}
+    C_2 ={} & \text{``The response returned for request }x\text{ contains no} \\
+            & \text{instance of prohibited output class }P\text{.''}
+  \end{aligned}
+  \label{eq:claim-output}
+\end{equation}
+
+Assume that membership in \(P\) can be determined completely and
+reliably from the externally returned response.
+
+The material assurance question is then simply whether
+
+\begin{equation}
+  y \in P,
+\end{equation}
+
+where \(y\) is the externally observable output.
+
+All three architectures expose \(y\).
+
+Additional information concerning tool calls, internal execution,
+provenance, independent runtime observation, or state transitions may
+be valuable for other purposes, but under the assumptions of this claim
+it enables no additional distinction required to determine whether
+\(y\in P\).
+
+Thus,
+
+\begin{equation}
+  \mathcal{G}_{q_2}(S_O)
+  =
+  \mathcal{G}_{q_2}(S_A)
+  =
+  \mathcal{G}_{q_2}(S_R).
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+  S_O
+  \sim_{q_2}
+  S_A
+  \sim_{q_2}
+  S_R.
+  \label{eq:case2-equivalence}
+\end{equation}
+
+This case is important because it prevents a common misinterpretation
+of structural assurability.
+
+More instrumentation does not necessarily imply greater assurability.
+
+If the assurance-relevant distinction can already be resolved completely
+from externally available evidence, additional structural evidence may
+contribute nothing to that particular assurance context.
+
+Thus,
+
+\begin{equation}
+  S_R\succ_{q_1}S_O
+\end{equation}
+
+and
+
+\begin{equation}
+  S_R\sim_{q_2}S_O
+\end{equation}
+
+can both hold without contradiction.
+
+Assurability is claim-relative.
+
+\subsection{Case 3: Internal Visibility Versus Independent Evidence}
+\label{aa.subsec.case-incomparability}
+
+The previous examples produced strict dominance and equivalence.
+
+A third case illustrates incomparability.
+
+Consider two architectures, \(S_V\) and \(S_N\).
+
+System \(S_V\) provides extensive visibility into internal execution.
+It exposes selected intermediate representations, internal state transitions,
+detailed tool-selection processes, and model-generated explanations of
+relevant actions.
+
+However, these observations are produced and preserved by infrastructure
+controlled by the same operator and execution environment as the system
+under evaluation.
+
+System \(S_N\), by contrast, exposes little internal state.
+It provides only limited visibility into model computation.
+
+However, consequential external actions are independently observed
+by a separate enforcement or monitoring component.
+Those records are authenticated and protected from retrospective
+alteration by the evaluated system.
+
+Consider the claim
+
+\begin{equation}
+  C_3 =
+  \text{``The agent intentionally attempted an unauthorized consequential action.''}
+  \label{eq:claim-intention-action}
+\end{equation}
+
+The claim contains at least two materially different components.
+
+One concerns internal process:
+
+\begin{equation}
+  \begin{aligned}
+    q_{\mathrm{internal}} ={} & \text{Did the agent enter a state or process}     \\
+                              & \text{relevant to attempted unauthorized action?}
+  \end{aligned}
+\end{equation}
+
+The other concerns external execution and attribution:
+
+\begin{equation}
+  \begin{aligned}
+    q_{\mathrm{external}} ={} & \text{Did a consequential unauthorized action occur,} \\
+                              & \text{and can it be independently attributed?}
+  \end{aligned}
+\end{equation}
+
+System \(S_V\) may enable distinctions over internal computational
+behavior unavailable from \(S_N\):
+
+\begin{equation}
+  g_{\mathrm{internal}}
+  \in
+  \mathcal{G}_{q_3}(S_V)
+  \setminus
+  \mathcal{G}_{q_3}(S_N).
+\end{equation}
+
+System \(S_N\), however, may enable independently corroborated
+distinctions concerning consequential external action that \(S_V\)
+cannot provide:
+
+\begin{equation}
+  g_{\mathrm{independent}}
+  \in
+  \mathcal{G}_{q_3}(S_N)
+  \setminus
+  \mathcal{G}_{q_3}(S_V).
+\end{equation}
+
+Accordingly,
+
+\begin{equation}
+  \mathcal{G}_{q_3}(S_V)
+  \nsubseteq
+  \mathcal{G}_{q_3}(S_N)
+\end{equation}
+
+and
+
+\begin{equation}
+  \mathcal{G}_{q_3}(S_N)
+  \nsubseteq
+  \mathcal{G}_{q_3}(S_V).
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+  S_V
+  \parallel_{q_3}
+  S_N.
+  \label{eq:case3-incomparable}
+\end{equation}
+
+Neither system dominates.
+
+A scalar assurance score would require assigning a relative value
+to internal visibility and independent external evidence.
+
+The structural framework does not impose such a tradeoff.
+
+That decision belongs to the specific assurance process, threat model,
+or decision authority.
+
+\subsection{Recasting the Cases as Claim-Relevant Distinctions}
+\label{aa.subsec.case-distinctions}
+
+The three cases can be interpreted through a common principle.
+
+Let \(\Omega_C\) represent alternatives relevant to assurance claim \(C\).
+
+Evidence contributes to structural assurability when it permits
+distinctions among alternatives in \(\Omega_C\) that would otherwise
+remain unresolved.
+
+For Case~1, relevant alternatives include:
+
+\begin{equation}
+  \begin{aligned}
+    \Omega_{C_1}
+    =
+    \{ &
+    \text{no consequential action},     \\
+       &
+    \text{authorized agent action},     \\
+       &
+    \text{unauthorized agent action},   \\
+       &
+    \text{human-initiated action},      \\
+       &
+    \text{externally initiated action}, \\
+       &
+    \text{action with unreliable historical record}
+    \}.
+  \end{aligned}
+\end{equation}
+
+The richer architectures expose evidence permitting progressively more
+of these alternatives to be distinguished.
+
+For Case~2,
+
+\begin{equation}
+  \Omega_{C_2}
+  =
+  \{
+  y\in P,
+  y\notin P
+  \}.
+\end{equation}
+
+The externally visible response already permits the relevant distinction.
+Additional structural instrumentation need not increase assurability.
+
+For Case~3, the relevant alternatives span both internal-process
+hypotheses and externally observable action hypotheses.
+Different architectures distinguish different subsets, producing
+incomparability.
+
+These examples motivate a more general interpretation:
+
+\begin{quote}
+  Structural assurability concerns the capacity of a system and
+  its evidence-producing environment to make distinctions among
+  alternatives material to an assurance claim.
+\end{quote}
+
+Under this interpretation, the structural dimensions introduced in
+Section~\ref{aa.subsec.candidate-dimensions} are important because
+removing one can make an assurance-relevant distinction unavailable.
+
+\subsection{Relationship to the Structural Dimensions}
+\label{aa.subsec.cases-dimensions}
+
+The examples also illustrate how the candidate structural dimensions
+affect assurance-relevant distinctions.
+
+\paragraph{Observability.}
+Observability determines whether relevant states, events, or effects
+enter the available evidence surface at all.
+
+\paragraph{Controllability.}
+Controllability determines whether an evaluator can create or reproduce
+conditions required to distinguish claim-relevant alternatives.
+
+\paragraph{Traceability.}
+Traceability permits observed events to be distinguished according
+to origin, causal pathway, or transformation history.
+
+\paragraph{Reconstructability.}
+Reconstructability preserves distinctions that may be required after
+the original execution has ended.
+
+\paragraph{Independence.}
+Independence permits distinctions between system self-report and
+corroboration generated outside the component or actor being evaluated.
+
+\paragraph{Integrity.}
+Integrity permits distinctions between trustworthy preservation of
+historical evidence and histories subject to undetected alteration
+or suppression.
+
+\paragraph{Evidence Coverage.}
+Evidence coverage determines which portions of the claim-relevant state,
+event, or action surface admit evidentiary distinctions at all.
+
+The dimensions therefore need not be interpreted as components of
+a numerical assurability score.
+
+Their more fundamental role is to govern which claim-relevant
+distinctions the evidence-producing architecture makes possible.
+
+\subsection{Cost and Practical Assurability}
+\label{aa.subsec.case-cost}
+
+The examples above can also be extended to include resource constraints.
+
+Suppose \(S_A\) and \(S_R\) both permit reconstruction of a consequential
+execution.
+
+In \(S_A\), reconstruction requires several days of specialist analysis
+across heterogeneous logs.
+
+In \(S_R\), authenticated provenance and preserved execution state permit
+the same claim-relevant distinction to be established automatically
+within minutes.
+
+Under an unconstrained budget, both systems may enable the same
+evidentiary capability.
+
+Under a resource constraint \(B^\ast\),
+
+\begin{equation}
+  \operatorname{cost}
+  \left(
+  g_{\mathrm{reconstruction}},
+  S_A,
+  K
+  \right)
+  >
+  B^\ast
+\end{equation}
+
+while
+
+\begin{equation}
+  \operatorname{cost}
+  \left(
+  g_{\mathrm{reconstruction}},
+  S_R,
+  K
+  \right)
+  \le
+  B^\ast.
+\end{equation}
+
+Then
+
+\begin{equation}
+  g_{\mathrm{reconstruction}}
+  \notin
+  \mathcal{G}_{(C,K,B^\ast)}(S_A)
+\end{equation}
+
+while
+
+\begin{equation}
+  g_{\mathrm{reconstruction}}
+  \in
+  \mathcal{G}_{(C,K,B^\ast)}(S_R).
+\end{equation}
+
+The systems therefore differ in practical assurability despite
+admitting similar evidence in principle.
+
+This distinction is particularly important for deployed AI systems.
+Assurance mechanisms that are technically possible but prohibitively
+expensive, slow, fragile, or operationally disruptive may provide
+little practical assurance under realistic constraints.
+
+Structural features that make useful evidence inexpensive and routine
+can therefore expand practical assurability without changing the
+underlying assurance claim.
+
+\subsection{What the Cases Demonstrate}
+\label{aa.subsec.case-summary}
+
+The three cases establish several properties of the framework.
+
+First, systems exhibiting similar functional behavior can differ
+materially in the assurance-relevant distinctions supported by their
+evidence-producing structures.
+
+Second, additional instrumentation does not automatically increase
+assurability.
+Its value depends upon the assurance claim.
+
+Third, structural assurability is not a universal ranking of architectures.
+The same pair of systems may exhibit strict dominance under one claim
+and equivalence under another.
+
+Fourth, architectures may be incomparable when each exposes
+claim-material distinctions unavailable from the other.
+
+Fifth, independence, integrity, provenance, internal visibility, and
+coverage are not interchangeable forms of ``more evidence.''
+They can enable qualitatively different assurance-relevant distinctions.
+
+Sixth, resource constraints can convert differences in the efficiency
+of evidence acquisition into differences in practical assurability.
+
+Most importantly, the cases support the central interpretation
+developed in this work:
+
+\begin{quote}
+  A system is structurally more assurable in a specified assurance
+  context when its architecture and evidence-producing environment
+  permit assurance-relevant distinctions that cannot practically
+  be made for the comparison system, while preserving the
+  distinctions already available from that system.
+\end{quote}
+
+This statement remains deliberately neutral regarding the eventual
+assurance outcome.
+
+A richer evidence structure may make it easier to support an
+assurance claim, easier to refute it, or both.
+
+Structural assurability concerns the capacity for examination,
+not the conclusion of that examination.
+
+The examples therefore reinforce the separation
+
+\begin{equation}
+  \boxed{
+    \begin{aligned}
+      \text{System Structure}
+       & \rightarrow
+      \text{Obtainable Evidence} \\
+       & \rightarrow
+      \text{Assurance-Relevant Distinctions}
+      \rightarrow
+      \text{Assurance Reasoning}.
+    \end{aligned}
+  }
+\end{equation}
+
+The present framework addresses the first three terms.
+
+The final inference from evidence and distinctions to an assurance
+conclusion remains the responsibility of the applicable assurance methodology.

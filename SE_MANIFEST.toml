@@ -1,0 +1,98 @@
+# ============================================================
+# SE_MANIFEST.toml (Repository Declaration)
+# ============================================================
+# Validate with:
+#   uvx se-manifest-schema validate-manifest --strict
+
+schema = "se-manifest-schema"
+schema_version = "0.5.2"
+schema_url = "https://raw.githubusercontent.com/structural-explainability/se-manifest-schema/main/manifest-schema.toml"
+
+# === Framework Context ===
+
+[meta]
+framework = "Structural Explainability"
+framework_url = "https://github.com/structural-explainability"
+purpose = "Declares this repository's role in the Structural Explainability ecosystem."
+
+# === Repository Identity ===
+
+[repository]
+organization = "structural-explainability"
+name = "paper-320-structural-assurability"
+class = "paper"
+kind = "paper"
+status = "draft"
+since = "2026"
+summary = "Paper developing structural assurability as a claim-relative capacity of a system and its evidence-producing environment to make assurance-relevant evidence obtainable, with a comparative model permitting equivalence, strict dominance, and incomparability and a separating-construction criterion for structural dimensions."
+
+# === Layer Position ===
+
+[layer]
+space = "structural-explainability"
+role = "justification"
+
+# === Dependency Declarations ===
+
+[depends]
+required = [
+    { repository = "se-theory-structural-assurability", kind = "semantic", reason = "Companion Lean 4 formalization of the claim-relative assurance context, evidence-capability preorder, and comparative assurability relation developed here." },
+]
+optional = []
+
+# === Provided Artifacts ===
+
+[provides]
+artifacts = [
+    ".annotations/annotations.md",
+    "CITATION.cff",
+    "LICENSE",
+    "README.md",
+    "SE_MANIFEST.toml",
+    "references.bib",
+    "se320_structural_assurability.tex",
+    "sections/*.tex",
+]
+
+# === Scope ===
+
+[scope]
+includes = [
+    "structural assurability as a claim-relative property",
+    "assurance context of system, claim, access and cooperation conditions, and resource constraints",
+    "distinction among property satisfaction, assurability, assurance argument, and confidence in the argument",
+    "practically obtainable evidence and claim-material evidence",
+    "evidentiary capabilities enabled by evidence",
+    "evidence-capability preorder",
+    "evidentiary equivalence and comparative assurability",
+    "equivalence, strict dominance, and incomparability without a scalar score",
+    "behavioral equivalence does not imply assurability equivalence",
+    "seven provisional structural dimensions of observability, controllability, traceability, reconstructability, independence, integrity, and evidence coverage",
+    "separating-construction criterion for admitting structural dimensions",
+    "derived assurance capabilities distinguished from primitive structural dimensions",
+    "access expansion and resource dependence",
+    "structural neutrality with respect to assurance outcome",
+    "illustrative comparison of representative AI architectures",
+]
+excludes = [
+    "universal scalar assurability score",
+    "claim that the structural dimensions are complete, independent, or sufficient",
+    "claim that every dimension is necessary for every assurance claim",
+    "evidence quality, measurement validity, and uncertainty",
+    "soundness of assurance arguments and confidence in them",
+    "determination that a particular AI system satisfies an assurance claim",
+    "certification of AI system safety or trustworthiness",
+    "Lean definitions and theorem proofs, which belong to se-theory-structural-assurability",
+    "applied pilot investigation, which belongs to se-pilot-structural-assurability",
+]
+
+# === Citation ===
+
+[citation]
+cff = "CITATION.cff"
+preferred = "paper"
+
+# === Traceability ===
+
+[traceability]
+identifier_map = "none"

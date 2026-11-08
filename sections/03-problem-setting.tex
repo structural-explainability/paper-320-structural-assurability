@@ -1,0 +1,675 @@
+% !TeX root = ../se320_structural_assurability.tex
+
+% ==================================================
+\section{Problem Setting}
+\label{aa.sec.foundations}
+% ==================================================
+
+Assurance is fundamentally concerned with claims and evidence.
+Existing assurance theory provides substantial machinery for reasoning
+from evidence to claims: whether evidence is relevant and sufficient,
+whether an assurance argument is sound, what assumptions it depends upon,
+what defeaters remain, and what confidence in the resulting claim is justified.
+
+This work considers an antecedent question:
+
+\begin{quote}
+  What structural properties determine whether evidence relevant to
+  supporting or refuting an assurance claim can be obtained in the first place?
+\end{quote}
+
+This question is distinct from whether the claim is true and from whether
+a particular assurance argument is convincing.
+A system may satisfy a desired property while exposing little evidence
+that it does so.
+Conversely, a system may expose extensive and reliable evidence
+demonstrating that a desired property is not satisfied.
+
+We use the term \emph{assurability} for the capacity to make
+assurance-relevant evidence obtainable.
+We use \emph{structural assurability} when emphasizing architectural
+and environmental properties that contribute to this capacity.
+
+The objective of this section is deliberately limited.
+We define the object of study, identify the context in which assurability
+must be evaluated, distinguish structural properties from evidence-quality
+properties and practical constraints, and identify candidate structural
+dimensions whose contribution can be demonstrated through separating
+constructions.
+
+We do not claim that these dimensions are jointly sufficient to
+characterize assurability, individually necessary for every assurance
+problem, mutually independent, or complete.
+
+\subsection{From Assurance Evidence to Evidence Availability}
+\label{aa.subsec.evidence-availability}
+
+Let \(S\) denote a system and \(C\) an assurance claim concerning \(S\).
+Let \(E\) denote evidence relevant to \(C\), and let \(G\) denote an
+assurance argument connecting that evidence, together with applicable
+assumptions, to the claim.
+
+At a high level,
+
+\begin{equation}
+  E \xrightarrow{G} C.
+  \label{eq:evidence-claim}
+\end{equation}
+
+Much assurance research appropriately concentrates on this relationship:
+whether \(E\) supports \(C\), whether \(G\) is sound, what counterevidence
+or defeaters exist, and what confidence is justified.
+
+Before such reasoning can occur, however, relevant evidence must be obtainable.
+
+Consider systems \(S_1\) and \(S_2\) that implement the same externally
+visible functionality and exhibit equivalent behavior over an evaluation
+set \(T\):
+
+\begin{equation}
+  \operatorname{Behavior}_{T}(S_1)
+  =
+  \operatorname{Behavior}_{T}(S_2).
+  \label{eq:behavior-equivalence}
+\end{equation}
+
+Suppose \(S_1\) exposes only externally visible inputs and outputs,
+while \(S_2\) additionally preserves authenticated records of
+consequential actions, tool invocations, retrieved information,
+authorization decisions, provenance, and execution state.
+
+Behavioral equivalence does not imply evidentiary equivalence.
+The systems may therefore be indistinguishable with respect to \(T\)
+while differing materially in what can subsequently be established
+about their operation.
+
+This observation has mature analogues in other engineering disciplines.
+Design for testability modifies system architecture to improve the ability
+to establish test conditions and observe relevant system behavior.
+Software architecture similarly affects testability, analyzability,
+monitorability, and the cost and effectiveness of verification activities
+\cite{abramovici1990digitaltesting,bass2021softwarearchitecture}.
+
+The corresponding structural principle for assurance is:
+
+\begin{quote}
+  The architecture of a system and its evidence-producing environment
+  constrain the evidence that can practically be obtained concerning
+  assurance claims about that system.
+\end{quote}
+
+\subsection{Definition of Assurability}
+\label{aa.subsec.definition-assurability}
+
+The preceding observation motivates a deliberately minimal definition.
+
+\begin{definition}[Assurability]
+  \label{se320.def.Assurability}
+  The \emph{assurability} of a system \(S\) with respect to an assurance
+  claim \(C\), under conditions \(K\) and resource constraints \(B\),
+  is the capacity of the system and its evidence-producing environment
+  to make evidence relevant to supporting or refuting \(C\)
+  practically obtainable.
+\end{definition}
+
+We denote this claim-relative capacity by
+
+\begin{equation}
+  \mathcal{A}(S,C,K,B).
+  \label{eq:assurability}
+\end{equation}
+
+The notation does not imply that \(\mathcal{A}\) is scalar-valued.
+Indeed, the framework developed here deliberately avoids assuming
+that heterogeneous assurance properties can be reduced to a meaningful
+universal score.
+
+Several features of Definition~1 are intentional.
+
+First, assurability concerns evidence, not truth.
+A highly assurable system may provide decisive evidence that claim \(C\)
+is false.
+
+Second, assurability concerns evidence capable of supporting
+\emph{or refuting} \(C\).
+A structure that facilitates favorable evidence while systematically
+obscuring disconfirming evidence should not thereby be considered
+highly assurable.
+
+Third, the definition does not specify which evidence is sufficient
+for establishing \(C\).
+Sufficiency belongs to the downstream assurance problem and depends
+upon the claim, argument, evidence model, threat model, and applicable
+assurance requirements.
+
+Fourth, the definition does not require that evidence originate within
+the system.
+The evidence-producing environment may include deployment infrastructure,
+independent monitors, external evaluators, physical sensors, network
+services, human processes, or other systems.
+
+Assurability is therefore distinct from the property being assured,
+from the assurance argument, and from confidence in that argument:
+
+\begin{equation}
+  \boxed{
+    \begin{aligned}
+      \text{Property satisfaction}
+       & \neq
+      \text{Assurability} \\
+       & \neq
+      \text{Assurance argument}
+      \neq
+      \text{Confidence in the argument}.
+    \end{aligned}
+  }
+  \label{eq:assurance-distinctions}
+\end{equation}
+
+\subsection{Assurance Context}
+\label{aa.subsec.assurance-context}
+
+Assurability is not an unconditional property of \(S\).
+
+A system may provide strong evidence concerning whether an external
+action occurred while providing little evidence concerning the internal
+computational process that produced the action.
+It may therefore be highly assurable with respect to one claim and
+weakly assurable with respect to another.
+
+Evidence availability also depends upon evaluator access and cooperation.
+A developer may possess model weights, activations, system prompts,
+execution traces, configuration data, and infrastructure logs.
+An external evaluator may possess only API access.
+An independent assessor may receive selected evidence but lack direct
+system access.
+In an adversarial setting, the developer, operator, or system itself
+may attempt to suppress, manipulate, or fabricate evidence.
+
+We collect these knowledge, access, trust, and cooperation conditions
+in \(K\).
+
+Finally, theoretically obtainable evidence may not be practically
+obtainable.
+Assurance consumes computation, time, expertise, storage, instrumentation,
+system access, and other resources.
+Assurance mechanisms may additionally impose latency, performance,
+disclosure, or operational costs.
+We represent relevant resource constraints by \(B\).
+
+We therefore define:
+
+\begin{definition}[Assurance Context]
+  \label{se320.def.AssuranceContext}
+  An \emph{assurance context} is a tuple
+  \begin{equation}
+    Q=(S,C,K,B),
+  \end{equation}
+  specifying the system under consideration, the assurance claim,
+  the applicable knowledge, access, trust, and cooperation conditions,
+  and the resource constraints under which assurance evidence
+  must be obtained.
+\end{definition}
+
+Comparative statements about assurability are meaningful only relative
+to a sufficiently specified assurance context.
+
+In particular,
+
+\begin{quote}
+  System \(S_1\) is more assurable than system \(S_2\)
+\end{quote}
+
+is generally underspecified.
+
+The comparison must identify what is being assured and under what conditions.
+
+\subsection{Structure, Evidence Quality, and Constraints}
+\label{aa.subsec.three-layers}
+
+A useful characterization of assurability requires distinguishing
+three classes of factors that are easily conflated:
+
+\begin{enumerate}
+  \item structural properties of the system and evidence-producing environment;
+  \item properties governing the evidentiary or inferential quality of observations; and
+  \item contextual constraints governing whether evidence can practically be obtained.
+\end{enumerate}
+
+These occupy different roles in the assurance process.
+
+\paragraph{Structural properties.}
+Structural properties determine what can be exposed, controlled,
+associated with its origin, preserved, reconstructed, independently
+corroborated, protected, and covered by the evidence-producing architecture.
+These properties are the primary subject of structural assurability.
+
+\paragraph{Evidence and inference properties.}
+Once evidence is available, additional questions arise concerning its
+relevance, validity, fidelity, calibration, and uncertainty.
+These properties govern what may legitimately be inferred from an
+observation or measurement.
+
+For example, an architecture may expose an internal measurement perfectly
+while the measurement itself is an invalid indicator of the construct
+it is intended to represent.
+Greater structural observability does not resolve construct validity.
+
+\paragraph{Contextual constraints.}
+Access, cooperation, time, computation, expertise, financial cost,
+disclosure restrictions, and operational burden constrain which
+structurally available evidence can actually be obtained in a
+particular assurance context.
+These constraints are represented principally through \(K\) and \(B\).
+
+The distinction can be summarized as
+
+\begin{equation}
+  \boxed{
+    \begin{aligned}
+      \text{Structure}
+       & \longrightarrow
+      \text{Obtainable Evidence} \\
+       & \longrightarrow
+      \text{Evidence and Inference}
+      \longrightarrow
+      \text{Assurance Argument},
+    \end{aligned}
+  }
+  \label{eq:three-layer-chain}
+\end{equation}
+
+subject throughout to the conditions and constraints of the assurance context.
+
+This separation is important because the present theory concerns
+the first transition.
+Structural assurability constrains what evidence can be made available;
+it does not by itself establish the validity of subsequent inference
+or the sufficiency of an assurance argument.
+
+\subsection{Candidate Structural Dimensions}
+\label{aa.subsec.candidate-dimensions}
+
+Prior work across hardware testing, software architecture, safety
+engineering, security evaluation, auditability, runtime assurance,
+and AI monitoring suggests several recurring structural properties
+that affect the availability and usefulness of assurance evidence.
+
+We begin with seven candidate dimensions:
+
+\begin{description}
+  \item[Observability.]
+        The extent to which states, events, behaviors, or effects relevant
+        to an assurance claim can be observed.
+
+  \item[Controllability.]
+        The extent to which conditions relevant to evaluating an assurance
+        claim can be established and relevant interventions can be performed.
+
+  \item[Traceability.]
+        The extent to which evidence can be associated with its origin,
+        transformation history, and relevant system events.
+
+  \item[Reconstructability.]
+        The extent to which a relevant execution, decision sequence,
+        or system state can subsequently be reconstructed from preserved evidence.
+
+  \item[Independence.]
+        The extent to which evidence can be generated, preserved, or
+        corroborated independently of the component or actor whose behavior
+        is the subject of the assurance claim.
+
+  \item[Integrity.]
+        The extent to which alteration, fabrication, suppression,
+        substitution, or corruption of assurance evidence can be detected
+        or prevented.
+
+  \item[Evidence Coverage.]
+        The extent to which the evidence-producing structure exposes
+        the states, behaviors, events, interfaces, or effects material
+        to the assurance claim.
+\end{description}
+
+We denote the current candidate set by
+
+\begin{equation}
+  D_S =
+  \{
+  O,C,T,R,N,I,E
+  \},
+  \label{eq:structural-dimensions}
+\end{equation}
+
+where the symbols are used only as compact identifiers and do not
+imply numerical measurement scales.
+
+The candidate set is deliberately provisional.
+
+The dimensions are not asserted to be mutually independent.
+They may interact or partially depend upon one another.
+Reconstructability, for example, may depend upon observability,
+traceability, and evidence integrity.
+Evidence coverage may depend upon the placement and scope
+of observation mechanisms.
+
+Nor is each dimension asserted to be necessary for every assurance claim.
+Some claims require no access to internal state.
+Some require no intervention.
+Some can be established through independently observable external effects.
+
+The purpose of the candidate dimensions is therefore not to define
+a checklist that every assurable system must satisfy.
+It is to identify structural variables whose omission can erase
+distinctions that matter to assurance.
+
+\subsection{Derived Assurance Capabilities}
+\label{aa.subsec.derived-capabilities}
+
+Several important properties associated with assurance appear better
+treated as capabilities emerging from combinations of structural
+dimensions rather than as primitive dimensions themselves.
+
+These include, potentially,
+
+\begin{equation}
+  \{
+  \text{reproducibility},
+  \text{auditability},
+  \text{monitorability},
+  \text{testability},
+  \text{diagnosability}
+  \}.
+\end{equation}
+
+For example, reproducibility may depend upon sufficient traceability,
+reconstructability, controllability, configuration preservation,
+and environmental information.
+Testability classically depends in substantial part upon observability
+and controllability.
+
+Treating these properties as derived rather than primitive avoids
+assuming independence where the underlying engineering relationships
+suggest composition.
+
+This classification is itself provisional.
+If a proposed derived capability contains an assurance-relevant
+structural property not represented by the current primitive set,
+that property should be identified and tested separately.
+
+\subsection{The Dimension Contribution Criterion}
+\label{aa.subsec.dimension-contribution}
+
+A candidate structural dimension should not be included merely
+because it appears intuitively related to assurance.
+Its contribution should be demonstrable.
+
+We therefore introduce a criterion based on separating constructions.
+
+\begin{definition}[Assurance-Relevant Structural Dimension]
+  \label{se320.def.AssuranceRelevantStructuralDimension}
+  A candidate structural dimension \(d\) is \emph{assurance-relevant}
+  if there exists an assurance context and a pair of systems for which
+  a difference in \(d\), while holding other properties material to
+  the comparison fixed, produces a material difference in the evidence
+  practically obtainable for supporting or refuting the assurance claim.
+\end{definition}
+
+Let \(S_d^{+}\) and \(S_d^{-}\) denote systems constructed to differ
+materially with respect to candidate dimension \(d\) while remaining
+equivalent with respect to other properties material to a specified comparison.
+
+Let \(\mathcal{E}(S,C,K,B)\) denote the claim-relevant evidence
+practically obtainable from \(S\) under conditions \(K\)
+and constraints \(B\).
+
+Dimension \(d\) is assurance-relevant if there exist \(C\), \(K\),
+and \(B\) such that
+
+\begin{equation}
+  \mathcal{E}(S_d^{+},C,K,B)
+  \not\equiv_C
+  \mathcal{E}(S_d^{-},C,K,B),
+  \label{eq:dimension-separation}
+\end{equation}
+
+where \(\not\equiv_C\) denotes a difference in obtainable evidence
+material to supporting or refuting \(C\).
+
+We call such a pair a \emph{separating construction} for \(d\).
+
+The logical strength of this criterion is intentionally limited.
+
+A separating construction does not establish that \(d\) is required
+for every assurance context.
+It does not establish that increasing \(d\) monotonically increases
+assurability.
+It does not establish that \(d\) is independent of other dimensions.
+
+It establishes only that
+
+\begin{quote}
+  there exists an assurance context in which omitting \(d\) from
+  the model would collapse a distinction between systems that
+  materially affects their capacity to support or refute an
+  assurance claim.
+\end{quote}
+
+This is the sense in which a dimension is necessary to the general
+framework: not because every assurable system must possess it,
+but because a framework incapable of representing it would fail
+to distinguish some systems that differ materially in assurability.
+
+\subsection{Separating the Candidate Dimensions}
+\label{aa.subsec.separating-dimensions}
+
+The contribution criterion can be illustrated informally for each
+current candidate dimension.
+
+\paragraph{Observability.}
+Consider otherwise equivalent systems in which only one exposes
+a state relevant to \(C\).
+If direct observation of that state provides evidence unavailable
+from the other system, observability separates their assurability.
+
+
+\paragraph{Controllability.}
+Consider otherwise equivalent observable systems in which only one
+permits the evaluator to establish a condition or intervention
+required to investigate \(C\).
+The ability to obtain evidence under that condition separates
+their assurability.
+
+\paragraph{Traceability.}
+Consider systems that expose the same event but differ in whether
+the event can be reliably associated with its originating component,
+action, or causal history.
+For a claim whose evaluation depends upon attribution, traceability
+separates their assurability.
+
+\paragraph{Reconstructability.}
+Consider systems with equivalent runtime behavior and live
+observability, but only one preserves sufficient state and history
+to reconstruct a relevant execution after an incident.
+For retrospective assurance claims, reconstructability separates
+their assurability.
+
+\paragraph{Independence.}
+Consider systems providing equivalent records, but in one system
+the only record is generated by the component being evaluated,
+while the other additionally provides independently generated
+or protected corroboration.
+For claims vulnerable to self-reporting or common-mode failure,
+independence separates their assurability.
+
+\paragraph{Integrity.}
+Consider systems exposing equivalent records, but only one
+prevents or detects alteration, fabrication, or suppression
+of those records.
+For claims relying upon the historical record, integrity
+separates their assurability.
+
+\paragraph{Evidence Coverage.}
+Consider systems whose individual observations are otherwise
+equivalent, but one exposes only a proper subset of the
+claim-relevant action surface.
+For claims spanning the omitted behavior, evidence coverage
+separates their assurability.
+These examples motivate the dimension-specific constructions
+examined in Section~\ref{aa.sec.formal-model}.
+
+Section~\ref{aa.sec.formal-model} develops the comparative relation
+required to state these results more precisely.
+
+\subsection{Contribution Without Sufficiency}
+\label{aa.subsec.necessity-sufficiency}
+
+The framework deliberately distinguishes between demonstrating
+that a dimension contributes to assurability and claiming that
+a collection of dimensions completely characterizes assurability.
+
+For a candidate dimension \(d\), a separating construction can
+demonstrate that \(d\) cannot generally be discarded without
+losing an assurance-relevant distinction.
+
+It does not establish that \(d\) is necessary for every assurance claim.
+
+Likewise, establishing the relevance of every member of the current
+candidate set \(D_S\) does not establish that \(D_S\) is sufficient
+or complete.
+
+In particular, we do not claim
+
+\begin{equation}
+  \bigwedge_{d_i \in D_S} d_i
+  \Longrightarrow
+  \text{sufficient assurance},
+  \label{eq:no-sufficiency}
+\end{equation}
+
+nor do we claim that \(D_S\) exhausts the structural properties
+relevant to future assurance problems.
+
+A new system architecture, assurance claim, threat model,
+measurement mechanism, or evidence source may expose an
+additional structural property \(d_{n+1}\).
+
+If that property admits a separating construction under
+Definition~3, the framework can be extended:
+
+\begin{equation}
+  D'_S = D_S \cup \{d_{n+1}\}.
+\end{equation}
+
+This open-endedness is intentional.
+
+The space of future assurance claims, architectures, threats,
+measurements, and evidence mechanisms is not closed.
+A claim that the current dimensions are jointly sufficient
+would therefore require assumptions that this work cannot justify.
+
+The contribution is narrower:
+
+\begin{quote}
+  We identify structural dimensions that demonstrably affect
+  assurability, provide a criterion for establishing their
+  contribution, and construct a framework that can be extended
+  when additional assurance-relevant dimensions are identified.
+\end{quote}
+
+\subsection{Structural Neutrality}
+\label{aa.subsec.structural-neutrality}
+
+Structural assurability does not determine the outcome of assurance.
+
+An evidence-producing architecture should support examination
+regardless of whether the resulting evidence confirms or defeats
+the assurance claim.
+The structure should not embed the favorable conclusion
+it is intended to help evaluate.
+
+Thus,
+
+\begin{equation}
+  \text{greater structural capacity for assurance}
+  \not\Rightarrow
+  \text{a more favorable assurance outcome}.
+\end{equation}
+
+Indeed, a highly assurable system may be easier to reject precisely
+because its structure makes adverse evidence difficult to conceal.
+
+This neutrality separates evidence availability from downstream
+interpretation and judgment.
+Structural assurability concerns the conditions under which relevant
+evidence can be obtained and examined; it does not determine what
+conclusion an evaluator must draw from that evidence.
+
+\subsection{The Comparative Problem}
+\label{aa.subsec.comparative-problem}
+
+The preceding definitions lead to the central problem of comparative
+assurability.
+
+Consider systems \(S_1\) and \(S_2\) subject to the same assurance
+claim \(C\), knowledge and access conditions \(K\), and resource
+constraints \(B\).
+
+The systems may exhibit equivalent functional behavior while differing
+along one or more assurance-relevant structural dimensions.
+
+The comparative question is:
+
+\begin{quote}
+  Do structural differences between \(S_1\) and \(S_2\) create
+  material differences in the evidence practically obtainable
+  for supporting or refuting \(C\)?
+\end{quote}
+
+\begin{definition}[Evidentiary Equivalence]
+  \label{se320.def.EvidentiaryEquivalence}
+  Two systems \(S_1\) and \(S_2\) are \emph{evidentially equivalent}
+  relative to a claim \(C\), conditions \(K\), and constraints \(B\)
+  if their practically obtainable evidence has no difference
+  material to supporting or refuting \(C\). We write
+  \[
+    \mathcal{E}(S_1,C,K,B)
+    \equiv_C
+    \mathcal{E}(S_2,C,K,B).
+  \]
+\end{definition}
+
+\begin{definition}[Comparative Assurability]
+  \label{se320.def.ComparativeAssurability}
+  \emph{Comparative assurability} evaluates the relative capacity
+  of two systems to make evidence relevant to supporting or
+  refuting the same claim practically obtainable under specified,
+  comparable conditions and resource constraints.
+  The comparison may yield equivalence, dominance, tradeoffs,
+  or incomparability; it does not presuppose a scalar score
+  or total order.
+\end{definition}
+
+Behavioral equivalence does not imply assurability equivalence.
+
+This motivates the central premise of the framework:
+
+\begin{quote}
+  \textbf{Central Premise.}
+
+  Systems with equivalent functional behavior or measured
+  performance can differ materially in assurability because
+  their architectures and evidence-producing environments
+  can differ in assurance-relevant structural dimensions.
+\end{quote}
+
+The contribution is therefore neither a universal assurance score
+nor a finite checklist whose satisfaction guarantees assurance.
+
+It is a framework for identifying, demonstrating, and comparing
+structural factors that affect the practical capacity to obtain
+assurance evidence.
+
+Section~\ref{aa.sec.formal-model} develops the comparative relation
+formally and examines the candidate dimensions through separating
+constructions, while permitting equivalence, dominance, tradeoffs,
+and incomparability rather than requiring a total ordering.

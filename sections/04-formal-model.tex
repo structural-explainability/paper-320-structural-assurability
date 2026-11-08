@@ -1,0 +1,1491 @@
+% !TeX root = ../se320_structural_assurability.tex
+% ==================================================
+\section{A Formal Model of Comparative Assurability}
+\label{aa.sec.formal-model}
+% ==================================================
+
+Section~\ref{aa.sec.foundations} defined assurability as the capacity of a system and its evidence-producing environment
+to make evidence relevant to supporting or refuting an assurance claim practically obtainable.
+It further identified candidate structural dimensions and proposed a separating-construction criterion for determining whether a dimension contributes to assurability.
+
+This section develops that framework formally.
+
+The objective is deliberately limited.
+We do not define a universal scalar measure of assurability, assert that the current
+structural dimensions are complete, or claim that any combination of them is sufficient for assurance.
+Instead, we define a comparative model capable of representing when two systems differ in the assurance-relevant evidence capabilities made possible by their structures.
+
+The model permits equivalence, strict dominance, tradeoffs, and incomparability without
+requiring heterogeneous assurance properties to be collapsed into a single score.
+
+\subsection{Comparative Assurance Context}
+\label{aa.subsec.formal-context}
+
+Recall that an assurance context includes a system \(S\), an assurance claim \(C\),
+applicable knowledge, access, trust, and cooperation conditions \(K\), and resource constraints \(B\).
+
+For comparison between systems, we hold the non-system components fixed and define
+
+\begin{equation}
+  q=(C,K,B)
+  \label{eq:comparative-context}
+\end{equation}
+
+as a \emph{comparative assurance context}.
+
+Systems \(S_1\) and \(S_2\) are therefore compared under the same claim, access and
+cooperation assumptions, and resource constraints.
+
+Let
+
+\begin{equation}
+  \mathcal{E}_q(S)
+  \label{eq:obtainable-evidence}
+\end{equation}
+
+denote the evidence practically obtainable from or about system \(S\) under \(q\).
+
+The term \emph{practically obtainable} is essential.
+Evidence that could be recovered only by violating the access assumptions in \(K\), exceeding the resource constraints in \(B\), relying upon unavailable cooperation, or introducing capabilities not present in the specified evidence-producing environment is not included in \(\mathcal{E}_q(S)\).
+
+Evidence need not originate within \(S\).
+It may be produced by deployment infrastructure, independent monitors, physical observations, human processes, external evaluators, or other components permitted by \(K\).
+
+\subsection{Claim-Material Evidence}
+\label{aa.subsec.claim-material}
+
+Not every observable fact about a system contributes to every assurance problem.
+
+For example, exposing additional internal telemetry does not improve assurability
+for a claim if that telemetry cannot legitimately affect support for or refutation of the claim.
+
+We therefore distinguish evidence availability from claim materiality.
+
+Let
+
+\begin{equation}
+  \operatorname{Mat}_C(e)
+\end{equation}
+
+denote that evidence item \(e\) is material to claim \(C\): that is, \(e\)
+can legitimately affect an assurance argument concerning \(C\) under the applicable evidentiary and inferential standards.
+
+The claim-material evidence set is
+
+\begin{equation}
+  \mathcal{E}^{C}_q(S)
+  =
+  \left\{
+  e \in \mathcal{E}_q(S)
+  \mid
+  \operatorname{Mat}_C(e)
+  \right\}.
+  \label{eq:claim-material-evidence}
+\end{equation}
+
+Materiality is not itself treated as a structural property.
+Whether an observation legitimately bears on a claim is an evidentiary and inferential question.
+
+Structural assurability concerns whether potentially material evidence can be made obtainable.
+It does not guarantee that an evaluator will interpret that evidence validly.
+
+\subsection{Evidentiary Capabilities}
+\label{aa.subsec.evidentiary-capabilities}
+
+Direct comparison of raw evidence sets is insufficient.
+
+Two systems may produce different artifacts while enabling the same assurance-relevant inquiry.
+Conversely, two systems may expose superficially similar records while differing substantially
+in what those records permit an evaluator to establish.
+
+We therefore compare systems through the \emph{evidentiary capabilities} enabled by their evidence.
+
+Let
+
+\begin{equation}
+  \mathfrak{G}_C
+\end{equation}
+
+denote the universe of evidentiary capabilities potentially material to claim \(C\).
+
+An evidentiary capability is an assurance-relevant
+investigative or discriminative capability enabled by available evidence.
+Examples include the ability to:
+
+\begin{itemize}
+  \item determine whether a specified event occurred;
+  \item distinguish among candidate sources of an event;
+  \item associate an action with an authorization decision;
+  \item reconstruct a relevant execution path;
+  \item determine whether a specified state was reached;
+  \item corroborate a self-generated record independently;
+  \item detect alteration or suppression of a historical record;
+  \item examine behavior under a specified intervention or condition; or
+  \item exclude a claim-relevant class of otherwise plausible system behaviors.
+\end{itemize}
+
+Let
+
+\begin{equation}
+  \Gamma_C(E)
+  \subseteq
+  \mathfrak{G}_C
+  \label{eq:evidence-capability-map}
+\end{equation}
+
+denote the evidentiary capabilities enabled by evidence set \(E\),
+under fixed evidentiary and inferential standards.
+
+For a system \(S\) under comparative assurance context \(q\), define
+
+\begin{equation}
+  \mathcal{G}_q(S)
+  =
+  \Gamma_C\left(
+  \mathcal{E}^{C}_q(S)
+  \right).
+  \label{eq:system-capability-set}
+\end{equation}
+
+Thus, \(\mathcal{G}_q(S)\) represents not merely the evidence artifacts obtainable from \(S\),
+but the claim-material assurance inquiries those artifacts enable.
+
+This abstraction separates three questions:
+
+\begin{equation}
+  \boxed{
+    \begin{array}{rcl}
+      \mathcal{E}_q(S)
+       & : &
+      \text{What evidence can be obtained?}
+      \\[4pt]
+      \mathcal{E}^{C}_q(S)
+       & : &
+      \text{What obtainable evidence is material to } C\text{?}
+      \\[4pt]
+      \mathcal{G}_q(S)
+       & : &
+      \text{What assurance-relevant capabilities does that evidence enable?}
+    \end{array}
+  }
+  \label{eq:evidence-three-levels}
+\end{equation}
+
+The first question is principally structural and contextual.
+The second and third depend additionally upon the applicable evidence and inference model.
+
+For comparative structural analysis, those downstream standards are held fixed.
+
+\subsection{An Evidence-Capability Preorder}
+\label{aa.subsec.evidence-preorder}
+
+The capability representation permits a more precise comparison than the informal phrase ``provides no less capability.''
+
+For claim \(C\), define a relation on evidence sets by
+
+\begin{equation}
+  E_1
+  \preceq_C^{E}
+  E_2
+  \quad\Longleftrightarrow\quad
+  \Gamma_C(E_1)
+  \subseteq
+  \Gamma_C(E_2).
+  \label{eq:evidence-preorder}
+\end{equation}
+
+Thus, \(E_2\) is at least as capable as \(E_1\) with respect to claim \(C\) when every assurance-relevant capability enabled by \(E_1\) is also enabled by \(E_2\).
+
+The relation is reflexive because
+
+\begin{equation}
+  \Gamma_C(E)
+  \subseteq
+  \Gamma_C(E),
+\end{equation}
+
+and transitive because
+
+\begin{equation}
+  \Gamma_C(E_1)
+  \subseteq
+  \Gamma_C(E_2)
+  \quad\text{and}\quad
+  \Gamma_C(E_2)
+  \subseteq
+  \Gamma_C(E_3)
+\end{equation}
+
+imply
+
+\begin{equation}
+  \Gamma_C(E_1)
+  \subseteq
+  \Gamma_C(E_3).
+\end{equation}
+
+It is therefore a preorder on evidence sets.
+
+Distinct evidence sets may occupy the same equivalence class if they enable the same claim-material capabilities.
+
+This is desirable.
+The theory concerns what evidence permits an evaluator to establish, not the incidental representation of the evidence artifact.
+
+\subsection{Evidentiary and Assurability Equivalence}
+\label{aa.subsec.evidentiary-equivalence}
+
+We can now define equivalence precisely.
+
+\begin{quote}
+  \textbf{Definition 4 (Evidentiary Equivalence).}
+  Systems \(S_1\) and \(S_2\) are \emph{evidentially equivalent} under comparative assurance context \(q\), written
+
+  \begin{equation}
+    S_1 \equiv_q^{E} S_2,
+  \end{equation}
+
+  when
+
+  \begin{equation}
+    \mathcal{G}_q(S_1)
+    =
+    \mathcal{G}_q(S_2).
+    \label{eq:evidentiary-equivalence}
+  \end{equation}
+\end{quote}
+
+Evidentiary equivalence does not require equality of evidence artifacts.
+
+For example, an authenticated infrastructure log and an independently observed physical event may be different artifacts while enabling the same claim-material capability for a particular assurance problem.
+
+Likewise, additional telemetry that enables no additional claim-material capability does not by itself distinguish systems under \(\equiv_q^E\).
+
+This prevents evidence volume from being mistaken for assurability.
+
+\subsection{Comparative Assurability}
+\label{aa.subsec.comparative-assurability}
+
+We next lift the evidence-capability relation to systems.
+
+\begin{quote}
+  \textbf{Definition 5 (Comparative Assurability).}
+  For a fixed comparative assurance context \(q=(C,K,B)\), system \(S_1\) is \emph{at least as assurable as} system \(S_2\), written
+
+  \begin{equation}
+    S_1 \succeq_q S_2,
+    \label{eq:assurability-preorder}
+  \end{equation}
+
+  if
+
+  \begin{equation}
+    \mathcal{G}_q(S_2)
+    \subseteq
+    \mathcal{G}_q(S_1).
+    \label{eq:capability-containment}
+  \end{equation}
+\end{quote}
+
+Thus, every claim-material evidentiary capability available from \(S_2\) must also be available from \(S_1\).
+
+Strict comparative assurability is defined by proper inclusion:
+
+\begin{equation}
+  S_1 \succ_q S_2
+  \quad\Longleftrightarrow\quad
+  \mathcal{G}_q(S_2)
+  \subset
+  \mathcal{G}_q(S_1).
+  \label{eq:strict-assurability}
+\end{equation}
+
+Assurability equivalence occurs when
+
+\begin{equation}
+  S_1 \sim_q S_2
+  \quad\Longleftrightarrow\quad
+  \mathcal{G}_q(S_1)
+  =
+  \mathcal{G}_q(S_2).
+  \label{eq:assurability-equivalence}
+\end{equation}
+
+Systems are incomparable when neither capability set contains the other:
+
+\begin{equation}
+  S_1 \parallel_q S_2
+\end{equation}
+
+if
+
+\begin{equation}
+  \mathcal{G}_q(S_1)
+  \nsubseteq
+  \mathcal{G}_q(S_2)
+\end{equation}
+
+and
+
+\begin{equation}
+  \mathcal{G}_q(S_2)
+  \nsubseteq
+  \mathcal{G}_q(S_1).
+  \label{eq:assurability-incomparability}
+\end{equation}
+
+Because set containment is reflexive and transitive, \(\succeq_q\) is a preorder on systems.
+
+Systems that enable identical evidentiary capabilities form equivalence classes under \(\sim_q\).
+The preorder induces a partial order over those equivalence classes.
+
+This is sufficient for comparative assurability.
+No total ranking is required.
+
+\subsection{Behavioral Equivalence Does Not Imply Assurability Equivalence}
+\label{aa.subsec.behavior-not-assurability}
+
+The first general result follows directly.
+
+\begin{proposition}[Behavioral Non-Implication]
+  \label{se320.prop.BehavioralNonImplication}
+  Behavioral equivalence under an evaluation set does not imply assurability equivalence.
+\end{proposition}
+
+\textit{Construction.}
+Let systems \(S_1\) and \(S_2\) produce identical externally visible behavior for every input in evaluation set \(T\):
+
+\begin{equation}
+  \operatorname{Behavior}_T(S_1)
+  =
+  \operatorname{Behavior}_T(S_2).
+\end{equation}
+
+Suppose both systems perform consequential action \(a\).
+
+System \(S_1\) exposes the externally visible result of \(a\).
+
+System \(S_2\) exposes the same result and additionally preserves authenticated evidence associating \(a\) with its initiating component, authorization state, relevant tool invocation, and execution time.
+
+Let claim \(C\) concern whether \(a\) was initiated through an authorized system pathway.
+
+Under a comparative assurance context \(q\) in which the authenticated evidence is accessible within \(B\), \(S_2\) enables at least one claim-material capability---attribution of \(a\) to the relevant pathway---that \(S_1\) does not.
+
+Therefore,
+
+\begin{equation}
+  \mathcal{G}_q(S_1)
+  \neq
+  \mathcal{G}_q(S_2),
+\end{equation}
+
+and hence
+
+\begin{equation}
+  S_1
+  \not\sim_q
+  S_2.
+\end{equation}
+
+Thus,
+
+\begin{equation}
+  \operatorname{Behavior}_T(S_1)
+  =
+  \operatorname{Behavior}_T(S_2)
+  \not\Rightarrow
+  S_1\sim_q S_2.
+\end{equation}
+
+Behavioral equivalence therefore does not imply assurability equivalence.
+\hfill\(\square\)
+
+The result does not require either system to be
+safer, more correct, or more trustworthy.
+It establishes only that behavioral equivalence does
+not determine equivalence in the structural capacity to support assurance.
+
+\subsection{Separating Constructions}
+\label{aa.subsec.formal-separations}
+
+We now formalize the dimension-contribution criterion introduced in Section~\ref{aa.subsec.dimension-contribution}.
+
+Let \(d\) be a candidate structural dimension.
+
+A \emph{separating construction} for \(d\) consists of systems
+
+\begin{equation}
+  S_d^{-},
+  \qquad
+  S_d^{+},
+\end{equation}
+
+and comparative assurance context \(q_d\), such that the systems differ materially in \(d\), are otherwise controlled with respect to properties material to the construction, and satisfy
+
+\begin{equation}
+  \mathcal{G}_{q_d}(S_d^{-})
+  \neq
+  \mathcal{G}_{q_d}(S_d^{+}).
+  \label{eq:general-separation}
+\end{equation}
+
+Equivalently,
+
+\begin{equation}
+  S_d^{-}
+  \not\sim_{q_d}
+  S_d^{+}.
+\end{equation}
+
+This non-equivalence is sufficient to establish that \(d\) contributes to assurability.
+
+A stronger form occurs when the construction is a \emph{conservative extension}: every capability available from \(S_d^{-}\) is preserved in \(S_d^{+}\), and at least one additional claim-material capability is introduced.
+
+Then
+
+\begin{equation}
+  \mathcal{G}_{q_d}(S_d^{-})
+  \subset
+  \mathcal{G}_{q_d}(S_d^{+}),
+  \label{eq:directional-separation}
+\end{equation}
+
+and therefore
+
+\begin{equation}
+  S_d^{+}
+  \succ_{q_d}
+  S_d^{-}.
+\end{equation}
+
+The distinction is important:
+
+\begin{equation}
+  \boxed{
+    \begin{array}{c}
+      \text{non-equivalence establishes contribution;}
+      \\
+      \text{proper inclusion establishes directional dominance.}
+    \end{array}
+  }
+  \label{eq:separation-strength}
+\end{equation}
+
+The general theory requires only the weaker result.
+
+\subsection{Observability}
+\label{aa.subsec.observability-contribution}
+
+\begin{proposition}[Observability Contribution]
+  \label{se320.prop.ObservabilityContribution}
+  Observability is an assurance-relevant structural dimension.
+\end{proposition}
+
+\textit{Construction.}
+Let \(S_O^{-}\) and \(S_O^{+}\) execute the same computation
+
+\begin{equation}
+  x
+  \rightarrow
+  h_1
+  \rightarrow
+  h_2
+  \rightarrow
+  a
+\end{equation}
+
+and produce identical external action \(a\).
+
+In \(S_O^{-}\), only \(x\) and \(a\) are observable.
+
+In \(S_O^{+}\), state \(h_1\) is additionally exposed through an observation mechanism that does not otherwise alter the system properties material to the construction.
+
+Let \(C_O\) be a claim for which determining whether \(h_1\) possessed a specified property is material.
+
+Under suitable \(K\) and \(B\), \(S_O^{+}\) enables the capability
+
+\begin{equation}
+  g_O
+  =
+  \text{``observe the claim-relevant property of }h_1\text{''},
+\end{equation}
+
+while \(S_O^{-}\) does not.
+
+Therefore,
+
+\begin{equation}
+  \mathcal{G}_{q_O}(S_O^{-})
+  \neq
+  \mathcal{G}_{q_O}(S_O^{+}).
+\end{equation}
+
+Hence observability admits a separating construction and is assurance-relevant.
+\hfill\(\square\)
+
+If the added observation preserves every evidentiary capability of \(S_O^{-}\), then the construction is additionally directional:
+
+\begin{equation}
+  S_O^{+}
+  \succ_{q_O}
+  S_O^{-}.
+\end{equation}
+
+This stronger conclusion belongs to the construction, not to a universal claim that greater observability always yields greater assurability.
+
+\subsection{Controllability}
+\label{aa.subsec.controllability-contribution}
+
+\begin{proposition}[Controllability Contribution]
+  \label{se320.prop.ControllabilityContribution}
+  Controllability is an assurance-relevant structural dimension.
+\end{proposition}
+
+\textit{Construction.}
+Let \(S_C^{-}\) and \(S_C^{+}\) expose equivalent observations during ordinary execution.
+
+Suppose evaluation of claim \(C_C\) requires examining system behavior under condition \(x^\ast\).
+
+The evaluator cannot establish \(x^\ast\) in \(S_C^{-}\).
+
+In \(S_C^{+}\), an assurance interface permits the evaluator to establish \(x^\ast\), replay the relevant state, substitute the required environmental condition, or otherwise perform the intervention without altering the property material to \(C_C\).
+
+Thus \(S_C^{+}\) enables
+
+\begin{equation}
+  g_C
+  =
+  \text{``obtain evidence under condition }x^\ast\text{''},
+\end{equation}
+
+while \(S_C^{-}\) does not.
+
+Therefore,
+
+\begin{equation}
+  \mathcal{G}_{q_C}(S_C^{-})
+  \neq
+  \mathcal{G}_{q_C}(S_C^{+}).
+\end{equation}
+
+Controllability is therefore assurance-relevant.
+\hfill\(\square\)
+
+When the intervention interface conservatively adds this capability while preserving the capabilities already available from \(S_C^{-}\),
+
+\begin{equation}
+  S_C^{+}
+  \succ_{q_C}
+  S_C^{-}.
+\end{equation}
+
+\subsection{Traceability}
+\label{aa.subsec.traceability-contribution}
+
+\begin{proposition}[Traceability Contribution]
+  \label{se320.prop.TraceabilityContribution}
+  Traceability is an assurance-relevant structural dimension
+  distinct from mere event observability.
+\end{proposition}
+
+\textit{Construction.}
+Let \(S_T^{-}\) and \(S_T^{+}\) expose the same consequential event \(a\).
+
+In \(S_T^{-}\), the evidence establishes that \(a\) occurred but does not reliably associate it with its originating component or causal history.
+
+In \(S_T^{+}\), authenticated provenance associates
+
+\begin{equation}
+  \text{initiator}
+  \rightarrow
+  \text{decision}
+  \rightarrow
+  \text{authorization}
+  \rightarrow
+  \text{tool invocation}
+  \rightarrow
+  a.
+\end{equation}
+
+Let \(C_T\) concern whether \(a\) originated from a specified component or authorized pathway.
+
+Both systems expose occurrence of \(a\).
+The separating capability is therefore not event observation.
+
+System \(S_T^{+}\) additionally enables
+
+\begin{equation}
+  g_T
+  =
+  \text{``attribute }a\text{ to its relevant origin or pathway''}.
+\end{equation}
+
+Thus,
+
+\begin{equation}
+  \mathcal{G}_{q_T}(S_T^{-})
+  \neq
+  \mathcal{G}_{q_T}(S_T^{+}).
+\end{equation}
+
+Traceability is therefore assurance-relevant even when event observability is held fixed.
+\hfill\(\square\)
+
+For a conservative extension,
+
+\begin{equation}
+  S_T^{+}
+  \succ_{q_T}
+  S_T^{-}.
+\end{equation}
+
+\subsection{Reconstructability}
+\label{aa.subsec.reconstructability-contribution}
+
+\begin{proposition}[Reconstructability Contribution]
+  \label{se320.prop.ReconstructabilityContribution}
+  Reconstructability is an assurance-relevant structural dimension.
+\end{proposition}
+
+\textit{Construction.}
+Let \(S_R^{-}\) and \(S_R^{+}\) have equivalent runtime behavior and equivalent live observability.
+
+Following execution, \(S_R^{-}\) discards transient state and contextual information required to reconstruct the sequence leading to consequential action \(a\).
+
+System \(S_R^{+}\) preserves sufficient inputs, configuration, relevant state transitions, external responses, and action history to permit such reconstruction.
+
+Let \(C_R\) be a retrospective claim concerning the pathway by which \(a\) occurred.
+
+During live execution, the systems may expose equivalent information.
+After the event, however, \(S_R^{+}\) enables
+
+\begin{equation}
+  g_R
+  =
+  \text{``reconstruct the claim-relevant execution leading to }a\text{''},
+\end{equation}
+
+while \(S_R^{-}\) does not.
+
+Therefore,
+
+\begin{equation}
+  \mathcal{G}_{q_R}(S_R^{-})
+  \neq
+  \mathcal{G}_{q_R}(S_R^{+}).
+\end{equation}
+
+Reconstructability is therefore assurance-relevant even when live observability is held fixed.
+\hfill\(\square\)
+
+If reconstruction evidence is added without removing other capabilities, then
+
+\begin{equation}
+  S_R^{+}
+  \succ_{q_R}
+  S_R^{-}.
+\end{equation}
+
+\subsection{Independence}
+\label{aa.subsec.independence-contribution}
+
+\begin{proposition}[Independence Contribution]
+  \label{se320.prop.IndependenceContribution}
+  Independent evidence generation or corroboration is an
+  assurance-relevant structural dimension.
+\end{proposition}
+
+\textit{Construction.}
+Let \(S_N^{-}\) and \(S_N^{+}\) provide the same system-generated record concerning action \(a\).
+
+In \(S_N^{-}\), that record is the only evidence source.
+
+In \(S_N^{+}\), an independent component outside the control of the component under evaluation produces corroborating evidence concerning the same event.
+
+Let \(C_N\) be a claim for which failure, deception, compromise, or error in the evaluated component is within the threat model specified by \(K\).
+
+The system-generated record may possess the same nominal integrity in both systems.
+
+However, \(S_N^{+}\) additionally enables
+
+\begin{equation}
+  g_N
+  =
+  \text{``corroborate the claim-relevant event independently''}.
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+  \mathcal{G}_{q_N}(S_N^{-})
+  \neq
+  \mathcal{G}_{q_N}(S_N^{+}).
+\end{equation}
+
+Independence is therefore assurance-relevant even when the nominal integrity of the original evidence artifact is held fixed.
+\hfill\(\square\)
+
+Where independent corroboration preserves all previously available capabilities,
+
+\begin{equation}
+  S_N^{+}
+  \succ_{q_N}
+  S_N^{-}.
+\end{equation}
+
+\subsection{Integrity}
+\label{aa.subsec.integrity-contribution}
+
+\begin{proposition}[Evidence Integrity Contribution]
+  \label{se320.prop.EvidenceIntegrityContribution}
+  Evidence integrity is an assurance-relevant structural dimension
+  distinct from nominal evidence availability.
+\end{proposition}
+
+\textit{Construction.}
+Let \(S_I^{-}\) and \(S_I^{+}\) generate and expose the same class of execution records.
+
+In \(S_I^{-}\), an actor included within the threat model can silently alter, fabricate, delete, substitute, or suppress those records.
+
+In \(S_I^{+}\), the evidence-producing environment prevents such modification or makes it detectably evident.
+
+Let \(C_I\) concern whether an unauthorized action occurred during the recorded interval.
+
+Both systems nominally expose the same record type.
+The difference concerns whether manipulation of that historical evidence can itself be detected.
+
+System \(S_I^{+}\) therefore enables
+
+\begin{equation}
+  g_I
+  =
+  \text{``detect claim-material tampering or suppression of the record''},
+\end{equation}
+
+while \(S_I^{-}\) does not.
+
+Hence,
+
+\begin{equation}
+  \mathcal{G}_{q_I}(S_I^{-})
+  \neq
+  \mathcal{G}_{q_I}(S_I^{+}).
+\end{equation}
+
+Evidence integrity is therefore assurance-relevant even when nominal evidence availability is held fixed.
+\hfill\(\square\)
+
+If integrity protection adds this capability without removing another,
+
+\begin{equation}
+  S_I^{+}
+  \succ_{q_I}
+  S_I^{-}.
+\end{equation}
+
+\subsection{Evidence Coverage}
+\label{aa.subsec.evidence-coverage-contribution}
+
+\begin{proposition}[Evidence Coverage Contribution]
+  \label{se320.prop.EvidenceCoverageContribution}
+  Evidence coverage is an assurance-relevant structural dimension.
+\end{proposition}
+
+\textit{Construction.}
+Let the claim-relevant action surface be
+
+\begin{equation}
+  A_C
+  =
+  \{
+  a_1,a_2,\ldots,a_n
+  \}.
+\end{equation}
+
+Let \(S_E^{-}\) and \(S_E^{+}\) provide equivalent evidence for every event observed by both systems.
+
+System \(S_E^{-}\) exposes evidence only for
+
+\begin{equation}
+  A^{-}
+  \subset
+  A_C,
+\end{equation}
+
+while \(S_E^{+}\) exposes corresponding evidence across all of \(A_C\).
+
+Choose
+
+\begin{equation}
+  a_j
+  \in
+  A_C
+  \setminus
+  A^{-},
+\end{equation}
+
+and let \(C_E\) concern whether an unauthorized action occurred anywhere in \(A_C\).
+
+Even if observations over \(A^{-}\) are equally observable, traceable, independently corroborated, and integrity-protected in both systems, \(S_E^{-}\) provides no corresponding evidence capability over \(a_j\).
+
+System \(S_E^{+}\) therefore enables at least one claim-material capability absent from \(S_E^{-}\):
+
+\begin{equation}
+  g_E
+  =
+  \text{``investigate occurrence of unauthorized action }a_j\text{''}.
+\end{equation}
+
+Thus,
+
+\begin{equation}
+  \mathcal{G}_{q_E}(S_E^{-})
+  \neq
+  \mathcal{G}_{q_E}(S_E^{+}).
+\end{equation}
+
+Evidence coverage is therefore assurance-relevant independently of the quality of evidence over the already-covered surface.
+\hfill\(\square\)
+
+If coverage is expanded without losing existing capabilities,
+
+\begin{equation}
+  S_E^{+}
+  \succ_{q_E}
+  S_E^{-}.
+\end{equation}
+
+\subsection{What the Separating Constructions Establish}
+\label{aa.subsec.what-separation-establishes}
+
+Propositions~2--8 present candidate separating arguments for the
+seven structural dimensions.
+
+A completed separating construction has two obligations:
+a difference in the designated structural profile, and a
+claim-material difference in the evidentiary capabilities
+available under the specified assurance context.
+
+The second obligation is not a consequence of the first.
+It must be established separately.
+
+The companion Lean~4 formalization, version 0.4.1,
+provides dimension-specific, profile-grounded constructions for
+observability, evidence coverage, traceability, and reconstructability.
+These constructions require capability non-equivalence as a
+separate hypothesis.
+
+Controllability, independence, and integrity remain supported
+by the informal arguments presented here.
+
+For any candidate dimension \(d\), a completed separation requires
+
+\begin{equation}
+  \mathcal{G}_{q_d}(S_d^{-})
+  \neq
+  \mathcal{G}_{q_d}(S_d^{+}).
+  \label{eq:all-dimensions-separate}
+\end{equation}
+
+Such a result establishes contribution in the specified context.
+It does not establish universal monotonicity:
+
+\begin{equation}
+  \forall q,\;
+  d(S_1)>d(S_2)
+  \Rightarrow
+  S_1\succ_q S_2.
+  \label{eq:no-universal-monotonicity}
+\end{equation}
+
+Indeed, the notation \(d(S_1)>d(S_2)\) may itself be
+inappropriate for dimensions without a natural numerical scale.
+
+Nor does a separating construction establish that the dimension
+is required for every assurance claim.
+
+The contribution criterion is existential: a dimension matters
+to comparative assurability when a controlled structural difference
+is accompanied by an independently justified difference in
+claim-material evidentiary capabilities.
+
+The formalization therefore provides a basis for testing
+candidate dimensions without asserting completeness,
+independence, or universal necessity.
+
+\subsection{Contribution Is Not Sufficiency}
+\label{aa.subsec.formal-non-sufficiency}
+
+The preceding propositions should not be combined into a sufficiency claim.
+
+Let
+
+\begin{equation}
+  D_S^{(0)}
+  =
+  \{
+  O,C,T,R,N,I,E
+  \}
+\end{equation}
+
+denote the current candidate structural set.
+
+For each candidate dimension, establishing contribution requires
+a separating construction satisfying
+
+\begin{equation}
+  \exists q_d,S_d^{-},S_d^{+}
+  :
+  S_d^{-}
+  \not\sim_{q_d}
+  S_d^{+}.
+\end{equation}
+
+This obligation includes an independently justified capability
+difference.
+
+Even when satisfied, these obligations do not establish
+
+\begin{equation}
+  D_S^{(0)}
+  \Longrightarrow
+  \text{complete characterization of assurability},
+\end{equation}
+
+and they do not establish
+
+\begin{equation}
+  \bigwedge_{d\in D_S^{(0)}} d
+  \Longrightarrow
+  \text{sufficient assurance}.
+  \label{eq:no-joint-sufficiency}
+\end{equation}
+
+The first unsupported implication would assert completeness of the structural model.
+
+The second would conflate structural evidence capacity with the downstream truth or justification of an assurance claim.
+
+Neither assertion is required by the theory.
+
+\subsection{Context Dependence}
+\label{aa.subsec.context-dependence}
+
+The same structural difference may affect assurability under one comparative assurance context while being irrelevant under another.
+
+For example, additional internal observability may introduce
+important evidentiary capabilities for a claim concerning internal computational state
+while providing no additional capability for a claim resolvable entirely through independently observable external effects.
+
+Likewise, independent corroboration may substantially affect assurability when the original evidence source
+falls within the threat model, while contributing no material distinction under a context that assumes the source to be trusted.
+
+Thus,
+
+\begin{equation}
+  S_1\succ_{q_1}S_2
+\end{equation}
+
+does not imply
+
+\begin{equation}
+  S_1\succ_{q_2}S_2.
+\end{equation}
+
+Nor does
+
+\begin{equation}
+  S_1\not\sim_{q_1}S_2
+\end{equation}
+
+imply
+
+\begin{equation}
+  S_1\not\sim_{q_2}S_2.
+\end{equation}
+
+Assurability comparison is inherently relative to the assurance claim and context.
+
+\subsection{Access Expansion}
+\label{aa.subsec.access-monotonicity}
+
+Access conditions affect obtainable evidence.
+
+Let
+
+\begin{equation}
+  K_1
+  \preceq_K
+  K_2
+\end{equation}
+
+mean that every evidence source accessible under \(K_1\) remains accessible under \(K_2\), while \(K_2\) may provide additional access.
+
+Holding \(C\), \(B\), the system, and applicable inferential standards fixed,
+suppose the additional access can be exercised within \(B\).
+
+Then
+
+\begin{equation}
+  \mathcal{E}_{(C,K_1,B)}(S)
+  \subseteq
+  \mathcal{E}_{(C,K_2,B)}(S).
+  \label{eq:access-evidence-monotonicity}
+\end{equation}
+
+Access expansion therefore cannot reduce the set of obtainable evidence under these assumptions.
+
+It does not follow that
+
+\begin{equation}
+  \mathcal{G}_{(C,K_1,B)}(S)
+  \subset
+  \mathcal{G}_{(C,K_2,B)}(S).
+\end{equation}
+
+Additional evidence may enable no additional claim-material capability.
+It may be irrelevant, redundant, invalid for the intended inference,
+dependent upon an existing source, or otherwise incapable of distinguishing alternatives material to \(C\).
+
+Therefore,
+
+\begin{equation}
+  \boxed{
+    \text{more access}
+    \Rightarrow
+    \text{no less obtainable evidence}
+  }
+\end{equation}
+
+under the stated assumptions, but
+
+\begin{equation}
+  \boxed{
+    \text{more obtainable evidence}
+    \not\Rightarrow
+    \text{strictly greater assurability}.
+  }
+\end{equation}
+
+This distinction prevents telemetry volume from being confused with structural assurance capability.
+
+\subsection{Resource Dependence}
+\label{aa.subsec.resource-dependence}
+
+Structural capabilities also interact with resource constraints.
+
+Let
+
+\begin{equation}
+  \operatorname{cost}(e,S,K)
+\end{equation}
+
+represent the resources required to obtain evidence \(e\) from or about \(S\) under access conditions \(K\).
+
+The quantity need not be monetary.
+It may represent computation, time, evaluator effort, storage, latency, specialized expertise,
+disclosure burden, operational disruption, or another resource constrained by \(B\).
+
+Evidence \(e\) belongs to the practically obtainable set only when its acquisition satisfies the applicable resource constraint:
+
+\begin{equation}
+  \operatorname{cost}(e,S,K)
+  \preceq
+  B.
+\end{equation}
+
+Consequently, two systems may make the same type of evidence theoretically accessible while differing in practical assurability.
+
+Suppose evidence capability \(g\) requires evidence \(e\), and
+
+\begin{equation}
+  \operatorname{cost}(e,S_1,K)
+  \preceq
+  B
+\end{equation}
+
+while
+
+\begin{equation}
+  \operatorname{cost}(e,S_2,K)
+  \npreceq
+  B.
+\end{equation}
+
+Then \(g\) may belong to
+
+\begin{equation}
+  \mathcal{G}_q(S_1)
+\end{equation}
+
+while being absent from
+
+\begin{equation}
+  \mathcal{G}_q(S_2).
+\end{equation}
+
+Thus, architectural differences that make evidence inexpensive, routine, and
+operationally useful can affect assurability even when comparable evidence
+is theoretically recoverable from another system given unconstrained resources.
+
+Resource constraints are therefore part of the assurance context rather than an incidental implementation concern.
+
+\subsection{Dominance and Incomparability}
+\label{aa.subsec.dominance}
+
+The capability-set formulation makes dominance explicit.
+
+If
+
+\begin{equation}
+  \mathcal{G}_q(S_2)
+  \subset
+  \mathcal{G}_q(S_1),
+\end{equation}
+
+then
+
+\begin{equation}
+  S_1
+  \succ_q
+  S_2.
+\end{equation}
+
+System \(S_1\) is a strict assurability extension of \(S_2\) for that context:
+it preserves every claim-material evidentiary capability available from \(S_2\) and adds at least one more.
+
+However, suppose
+
+\begin{equation}
+  g_a
+  \in
+  \mathcal{G}_q(S_1)
+  \setminus
+  \mathcal{G}_q(S_2)
+\end{equation}
+
+and
+
+\begin{equation}
+  g_b
+  \in
+  \mathcal{G}_q(S_2)
+  \setminus
+  \mathcal{G}_q(S_1).
+\end{equation}
+
+Then neither capability set contains the other, and
+
+\begin{equation}
+  S_1
+  \parallel_q
+  S_2.
+\end{equation}
+
+For example, one architecture may enable detailed internal-state examination
+while another provides stronger independently generated evidence of externally consequential actions.
+
+If both capabilities are material to \(C\),
+the general framework need not decide that one architecture is globally superior.
+
+The systems are incomparable under \(q\).
+
+The result indicates an assurance tradeoff.
+
+\subsection{Why No Universal Scalar Score Is Required}
+\label{aa.subsec.no-scalar}
+
+The framework therefore does not define a quantity such as
+
+\begin{equation}
+  \mathcal{A}(S)=0.87.
+\end{equation}
+
+Such a scalar would require additional commitments that have not been established:
+
+\begin{enumerate}
+  \item a complete set of assurance-relevant structural dimensions;
+  \item valid measurement scales for those dimensions;
+  \item a mapping from dimensions to evidentiary capabilities;
+  \item a weighting or aggregation rule for heterogeneous capabilities; and
+  \item a justification for the tradeoffs implied by that aggregation.
+\end{enumerate}
+
+None is required for comparative assurability.
+
+Set containment already permits rigorous statements of equivalence and dominance:
+
+\begin{equation}
+  \mathcal{G}_q(S_1)
+  =
+  \mathcal{G}_q(S_2),
+\end{equation}
+
+\begin{equation}
+  \mathcal{G}_q(S_1)
+  \subset
+  \mathcal{G}_q(S_2),
+\end{equation}
+
+or incomparability when neither inclusion holds.
+
+A scalar aggregation could later be introduced for a specific application, assurance authority, procurement regime, or engineering objective.
+
+Such an aggregation would be an additional decision model, not part of the foundational definition of assurability.
+
+\subsection{Derived Capabilities and Primitive Dimensions}
+\label{aa.subsec.derived-formal}
+
+The distinction between structural dimensions and evidentiary capabilities
+also clarifies why properties such as reproducibility, auditability, monitorability, testability, and diagnosability
+need not initially be treated as primitive dimensions.
+
+A derived capability may depend upon several structural dimensions.
+
+For example, a capability
+
+\begin{equation}
+  g_{\mathrm{replay}}
+  =
+  \text{``reproduce a relevant execution''}
+\end{equation}
+
+may require some combination of:
+
+\begin{equation}
+  \text{traceability},
+  \quad
+  \text{reconstructability},
+  \quad
+  \text{controllability},
+  \quad
+  \text{integrity},
+\end{equation}
+
+together with preservation of configuration and environmental state.
+
+The formal model therefore need not assign one primitive dimension to every familiar assurance concept.
+
+Structural dimensions characterize properties of the evidence-producing architecture.
+
+Evidentiary capabilities characterize what that structure makes possible for a particular assurance problem.
+
+The mapping
+
+\begin{equation}
+  D_S
+  \longrightarrow
+  \mathcal{E}_q(S)
+  \longrightarrow
+  \mathcal{G}_q(S)
+  \label{eq:dimensions-to-capabilities}
+\end{equation}
+
+may be many-to-many.
+
+This distinction also supplies a test for whether a proposed new concept
+should be treated as a primitive structural dimension or as a capability derived from existing dimensions.
+
+\subsection{Extension of the Structural Model}
+\label{aa.subsec.formal-open-endedness}
+
+Let the current structural candidate set be
+
+\begin{equation}
+  D_S^{(0)}
+  =
+  \{
+  O,C,T,R,N,I,E
+  \}.
+\end{equation}
+
+Suppose future work identifies structural property \(d^\ast\) not represented by \(D_S^{(0)}\).
+
+The property should be admitted as an additional assurance-relevant dimension if there exists a separating construction
+
+\begin{equation}
+  S_{d^\ast}^{-},
+  \qquad
+  S_{d^\ast}^{+},
+  \qquad
+  q_{d^\ast}
+\end{equation}
+
+such that
+
+\begin{equation}
+  S_{d^\ast}^{-}
+  \not\sim_{q_{d^\ast}}
+  S_{d^\ast}^{+},
+\end{equation}
+
+and the resulting capability difference cannot already be represented by variation in the existing dimensions.
+
+The structural set can then be extended:
+
+\begin{equation}
+  D_S^{(1)}
+  =
+  D_S^{(0)}
+  \cup
+  \{d^\ast\}.
+\end{equation}
+
+Conversely, if a proposed dimension produces no separating construction independent of the existing dimensions,
+its treatment as a distinct primitive dimension should be reconsidered.
+
+This yields two complementary tests:
+
+\begin{quote}
+  \textbf{Admission test.}
+  Does the proposed dimension expose an assurance-relevant capability distinction
+  that the current structural model cannot represent?
+\end{quote}
+
+\begin{quote}
+  \textbf{Reduction test.}
+  Can the apparent contribution of the proposed dimension be represented completely
+  through existing structural dimensions?
+\end{quote}
+
+The first supports extension.
+
+The second supports simplification.
+
+The theory therefore remains explicitly revisable as assurance science and AI architectures evolve.
+
+\subsection{Structural Neutrality}
+\label{aa.subsec.formal-neutrality}
+
+The capability ordering does not encode whether an assurance claim receives a favorable outcome.
+
+Suppose
+
+\begin{equation}
+  S_1
+  \succ_q
+  S_2.
+\end{equation}
+
+This means that \(S_1\) enables a strict superset of the claim-material evidentiary capabilities available from \(S_2\).
+
+It does not imply
+
+\begin{equation}
+  C(S_1)
+\end{equation}
+
+is more likely to be true than
+
+\begin{equation}
+  C(S_2).
+\end{equation}
+
+Indeed, the additional capability may expose evidence that defeats \(C\).
+
+Thus,
+
+\begin{equation}
+  \boxed{
+    S_1\succ_q S_2
+    \not\Rightarrow
+    \text{a more favorable assurance conclusion for }S_1.
+  }
+\end{equation}
+
+This is an essential neutrality property of the framework.
+
+Structural assurability describes the capacity for legitimate examination.
+It does not encode the desired result of that examination.
+
+\subsection{Summary of Formal Claims}
+\label{aa.subsec.formal-summary}
+
+The formal contribution of this section is intentionally bounded.
+
+We establish the following.
+
+\begin{enumerate}
+
+  \item For a fixed comparative assurance
+        context \(q=(C,K,B)\),
+        a system has a set of practically obtainable evidence
+        \[
+          \mathcal{E}_q(S),
+        \]
+        a claim-material subset
+        \[
+          \mathcal{E}^{C}_q(S),
+        \]
+        and a corresponding set of evidentiary capabilities
+        \[
+          \mathcal{G}_q(S).
+        \]
+
+  \item Evidence sets are compared through the claim-relative capability map
+        \[
+          \Gamma_C(E),
+        \]
+        rather than through raw evidence volume or artifact identity.
+
+  \item Comparative assurability is defined by capability containment:
+        \[
+          S_1\succeq_q S_2
+          \quad\Longleftrightarrow\quad
+          \mathcal{G}_q(S_2)
+          \subseteq
+          \mathcal{G}_q(S_1).
+        \]
+
+  \item Behavioral equivalence does not imply assurability equivalence.
+
+  \item A candidate structural dimension contributes to assurability when it admits a separating construction for which
+        \[
+          S_d^{-}
+          \not\sim_{q_d}
+          S_d^{+}.
+        \]
+
+  \item Strict dominance,
+        \[
+          S_d^{+}\succ_{q_d}S_d^{-},
+        \]
+        is a stronger construction-specific result requiring preservation
+        of the weaker system's claim-material capabilities together with at least one additional capability.
+
+  \item Seven candidate dimensions are examined through illustrative
+        separating arguments. Four have corresponding
+        dimension-specific, profile-grounded constructions in
+        the companion Lean~4 formalization.
+
+  \item Establishing contribution requires both structural-profile
+        separation and capability non-equivalence.
+        Neither obligation establishes universal necessity,
+        completeness, or sufficiency.
+
+  \item The assurability relation permits equivalence, strict dominance, and incomparability without requiring a universal scalar score.
+
+  \item Additional structural dimensions may be admitted when they expose assurance-relevant capability distinctions not representable by the existing dimensions.
+
+\end{enumerate}
+
+The resulting theory separates three questions that are frequently collapsed:
+
+\begin{equation}
+  \boxed{
+    \begin{array}{c}
+      \text{What evidence does the structure make obtainable?}
+      \\[4pt]
+      \downarrow
+      \\[4pt]
+      \text{What assurance-relevant capabilities does that evidence enable?}
+      \\[4pt]
+      \downarrow
+      \\[4pt]
+      \text{What conclusion should an assurance argument draw?}
+    \end{array}
+  }
+\end{equation}
+
+Structural assurability addresses the first two while deliberately leaving the final inferential judgment to the assurance process.
+
+The following section applies the framework to representative AI architectures to determine
+whether systems with similar functional capabilities can occupy different positions in the comparative assurability relation.

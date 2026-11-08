@@ -1,0 +1,49 @@
+% !TeX root = ../se320_structural_assurability.tex
+% ==================================================
+\section{Theoretical Results}
+\label{aa.sec.theoretical-results}
+% ==================================================
+
+The definitions and results of Sections~\ref{aa.sec.foundations} and~\ref{aa.sec.formal-model}
+are developed in a Lean~4 formalization.
+The companion Lean~4 formalization at version 0.4.1
+is authoritative for formal statements and proofs
+\citep{case2026sestructuralassurability}.
+
+\subsection{Established in the Formalization}
+
+\begin{itemize}
+  \item \emph{Resolution bound.}
+        If two admissible worlds are observationally indistinguishable under an observation model
+        and disagree on a claim, the model does not resolve the claim.
+
+  \item \emph{Capability comparison.}
+        Capability sets are compared by containment.
+        The capability model is abstract.
+        Monotonicity of capabilities under added evidence is an explicit assumption, not a derived result.
+
+  \item \emph{Access and resource expansion.}
+        The formalization states results on expanding evaluator access and resource bounds,
+        and a conservative-extension result.
+
+  \item \emph{Separating constructions.}
+        A generic separating construction is stated,
+        together with dimension-specific constructions for
+        observability, evidence coverage, traceability, and reconstructability.
+        Each construction involves two obligations:
+        the two systems differ in the named dimension's profile,
+        and their capability sets are not equivalent.
+        The second is a separate hypothesis, not a consequence of the first.
+\end{itemize}
+
+\subsection{Not Established}
+
+\begin{itemize}
+  \item Independence, integrity, and controllability are defined as candidate dimensions
+        but have no dimension-specific separating construction.
+  \item The separating-construction criterion establishes contribution to assurance-relevant capability,
+        not necessity or sufficiency.
+  \item The capability model is not derived from claim resolution beyond the worked examples.
+  \item The finite-model experiments on observability gaps, integrity, and collusion are exploratory
+        and are not part of the formal theory.
+\end{itemize}
